@@ -1,45 +1,13 @@
 # algodon
 
-This template should help get you started developing with Vue 3 in Vite.
+Proyecto desarrollado con vue 3 y Tailwind CSS en el area de front end
 
-## Recommended IDE Setup
+# pasos para ejecutar
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+1.- primero clonar o descargar el proyecto de github.
+2.- Ya clonado, entrar a la dirección del proyecto desde powershell o cmd
+3.- dentro del proyecto, realizar un npm install para instalar las dependecias
+NOTA: si no detecta el comando npm, favor de instalar el npm, node, y vue
+4.- ya instaladas las dependecias, se puede hacer un code . en el powershell o cmd para abrir el codigo fuente.
+5.- realizar en el cmd o powershell el siguiente comando para levantar el servidor local, "npm run dev".
+6.- entrar a la url que te de el powershell o cmd para ver el sitio web.
