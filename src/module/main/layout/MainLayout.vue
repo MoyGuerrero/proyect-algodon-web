@@ -3,7 +3,7 @@
   <div class="p-4 sm:ml-64">
     <!-- <div class="bg-[url('@/assets/images/ICONO_CALCULA_COTTON-30.png')] h-screen">
     </div> -->
-    <div class="p-4 border shadow-2xl container mx-auto">
+    <div class="p-4 container mx-auto">
       <RouterView />
     </div>
   </div>
