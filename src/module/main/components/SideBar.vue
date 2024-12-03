@@ -11,7 +11,7 @@
   </button>
 
   <aside id="sidebar-multi-level-sidebar"
-    class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform sm:translate-x-0 flex flex-col justify-between"
+    class="fixed top-0 left-0 z-40 w-64 h-full transition-transform sm:translate-x-0 flex flex-col justify-between"
     :class="{ '-translate-x-full': isVisibleAside }" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-600">
       <div class="mb-5 sm:hidden block">
@@ -59,7 +59,7 @@
           </template>
           <!-- <template v-else>
             <li>
-              <a href="#"
+              <RouterLink :to="{ name: menu.path }" @click="isVisibleAside = true"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <svg
                   class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -70,7 +70,7 @@
                     d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                 </svg>
                 <span class="ms-3"> {{ menu.name }} </span>
-              </a>
+              </RouterLink>
             </li>
           </template> -->
         </template>

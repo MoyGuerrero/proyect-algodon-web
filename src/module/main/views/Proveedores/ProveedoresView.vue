@@ -1,6 +1,10 @@
 <template>
   <div class="border shadow-2xl p-4">
-    <form @submit="onSubmit" class="grid grid-cols-4 gap-4">
+    <form @submit="onSubmit" class="md:grid md:grid-cols-4 md:gap-4">
+      <div class="mb-4 col-span-2 hidden">
+        <label for="id" class="form-label">ID</label>
+        <CustomInput v-model="id" v-bind="idAttrs" :error="errors.id" />
+      </div>
       <div class="mb-4 col-span-2">
         <label for="razonSocial" class="form-label">Razón Social</label>
         <CustomInput v-model="razonSocial" v-bind="razonSocialAttrs" :error="errors.razonSocial" />
@@ -57,10 +61,14 @@
 
       <!-- <button class="dark:bg-blue-600 py-2 rounded-xl dark:text-white dark:hover:bg-blue-800 font-semibold">Nuevo</button> -->
       <button type="submit"
-        class="dark:bg-green-600 py-2 rounded-xl dark:text-white dark:hover:bg-green-800 font-semibold">Guardar</button>
-      <!-- <button>Guardar</button> -->
+        class="dark:bg-green-600 md:py-2 py-4 px-3 rounded-xl dark:text-white dark:hover:bg-green-800 w-full font-semibold">
+        Guardar
+      </button>
+      <button type="button" @click="isOpenModal = true"
+        class="dark:bg-blue-600 md:py-2 py-4 px-3 rounded-xl dark:text-white dark:hover:bg-blue-800 w-full font-semibold">Consultar
+      </button>
     </form>
-
+    <ModalView :open="isOpenModal" @click="isOpenModal = false" :tipo="name" />
   </div>
   <!-- <pre>{{ errors }}</pre> -->
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="border shadow-2xl p-4">
-    <form class="grid grid-cols-2 gap-4">
+    <form class="md:grid md:grid-cols-2 md:gap-4">
       <div class="mb-4">
         <label for="grado" class="form-label">Grado</label>
         <CustomInput v-model="grados" v-bind="gradosAttrs" :error="errors.grados" />
@@ -19,7 +19,7 @@
       </div>
 
       <button type="submit"
-        class="dark:bg-green-600 block py-2 rounded-xl dark:text-white dark:hover:bg-green-800 font-semibold">Guardar</button>
+        class="dark:bg-green-600 block py-2 w-full rounded-xl dark:text-white dark:hover:bg-green-800 font-semibold">Guardar</button>
     </form>
 
 

@@ -12,6 +12,12 @@ export const useSideBar = () => {
   const menus = ref<Menu[]>([
     {
       id: uuidv4(),
+      name: 'Inicio',
+      path: 'main',
+      subpath: []
+    },
+    {
+      id: uuidv4(),
       name: 'Catalogos',
       subpath: [
         { id: uuidv4(), name: 'Provededores', path: 'proveedores' },
