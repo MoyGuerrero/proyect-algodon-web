@@ -1,8 +1,8 @@
 <template>
   <div>
-    <input :type="type" :value="modelValue" :placeholder="placeholder"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value ?? '')" @blur="$emit('blur')"
-      :class="['form-control', { 'border-red-500': error }]">
+    <textarea :type="type" :value="modelValue" :placeholder="placeholder" :rows="rows"
+      @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value ?? '')" @blur="$emit('blur')"
+      :class="['form-control resize-none', { 'border-red-500': error }]"></textarea>
     <span class="text-red-400" v-if="error">{{ error }}</span>
   </div>
 </template>
@@ -11,12 +11,14 @@
 
 withDefaults(defineProps<{
   modelValue?: string | number;
-  type?: 'text' | 'email' | 'number' | 'date' | 'tel';
+  type?: 'text' | 'email' | 'number';
   placeholder?: string;
   title?: string;
   error?: string;
+  rows?: string
 }>(), {
-  type: 'text'
+  type: 'text',
+  rows: "5"
 })
 
 
