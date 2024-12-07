@@ -1,8 +1,11 @@
 
+import ButtonCustom from '@/components/ButtonCustom.vue';
 import CustomInput from '@/components/CustomInput.vue';
 import { useForm } from 'vee-validate';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import * as yup from 'yup';
+import ModalViewWithSlots from '../../components/ModalViewWithSlots.vue';
+import { useRouter } from 'vue-router';
 
 const validationSchema = yup.object({
   grados: yup.string().required(),
@@ -13,15 +16,20 @@ const validationSchema = yup.object({
 
 export default defineComponent({
   components: {
-    CustomInput
+    CustomInput,
+    ButtonCustom,
+    ModalViewWithSlots
   },
   setup() {
+    const isVisibleModal = ref<boolean>(false)
     const { defineField, errors } = useForm({ validationSchema });
 
-    const [grados, gradosAttrs] = defineField('grados')
-    const [trashId, trashIdAttrs] = defineField('trashId')
-    const [color, colorAttrs] = defineField('color')
-    const [grade, gradeAttrs] = defineField('grade')
+    const router = useRouter();
+
+    const [grados, gradosAttrs] = defineField('grados');
+    const [trashId, trashIdAttrs] = defineField('trashId');
+    const [color, colorAttrs] = defineField('color');
+    const [grade, gradeAttrs] = defineField('grade');
 
     return {
       grados,
@@ -32,8 +40,10 @@ export default defineComponent({
       colorAttrs,
       grade,
       gradeAttrs,
+      isVisibleModal,
 
-      errors
+      errors,
+      router
     }
   }
 });

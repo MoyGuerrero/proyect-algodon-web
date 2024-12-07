@@ -1,6 +1,6 @@
 <template>
   <div class="border shadow-2xl p-4">
-    <form class="md:grid md:grid-cols-2 md:gap-4">
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="mb-4">
         <label for="grado" class="form-label">Grado</label>
         <CustomInput v-model="grados" v-bind="gradosAttrs" :error="errors.grados" />
@@ -17,9 +17,15 @@
         <label for="grade" class="form-label">Grade</label>
         <CustomInput v-model="grade" v-bind="gradeAttrs" :error="errors.grade" />
       </div>
+      <div class="md:col-span-2">
+        <div class="flex flex-row-reverse gap-1">
+          <button-custom type="button" text="Clases" @click="isVisibleModal = true" />
+          <button-custom type="submit" text="Guardar" />
 
-      <button type="submit"
-        class="dark:bg-green-600 block py-2 w-full rounded-xl dark:text-white dark:hover:bg-green-800 font-semibold">Guardar</button>
+        </div>
+      </div>
+      <!-- <button type="submit"
+        class="dark:bg-green-600 block py-2 rounded-xl md:w-32 w-full text-sm dark:text-white dark:hover:bg-green-800 font-semibold">Guardar</button> -->
     </form>
 
 
@@ -58,7 +64,7 @@
     </div>
 
   </div>
-
+  <modal-view-with-slots :open="isVisibleModal" @click="isVisibleModal = !isVisibleModal"></modal-view-with-slots>
 </template>
 
 <script src="./GradosClasificacion.ts" lang="ts"></script>
