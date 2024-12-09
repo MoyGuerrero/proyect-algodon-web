@@ -1,3 +1,4 @@
+import isAuthenticatedGuard from "@/module/auth/guards/is-authenticated.guard";
 import type { RouteRecordRaw } from "vue-router";
 
 
@@ -7,6 +8,7 @@ import type { RouteRecordRaw } from "vue-router";
 export const mainRoutes: RouteRecordRaw = {
   path: '/main',
   name: 'main',
+  beforeEnter: [isAuthenticatedGuard],
   component: () => import('@/module/main/layout/MainLayout.vue'),
   children: [
     { path: 'proveedores', name: 'proveedores', component: () => import('@/module/main/views/Proveedores/ProveedoresView.vue') },

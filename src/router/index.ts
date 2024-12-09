@@ -1,3 +1,4 @@
+import isNotAuthenticatedGuard from '@/module/auth/guards/is-not-authenticated.guard'
 import LoginLayout from '@/module/auth/layout/LoginLayout.vue'
 import { mainRoutes } from '@/module/main/routes'
 import NotFound from '@/module/no-found/NotFound.vue'
@@ -9,6 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
+      beforeEnter: [isNotAuthenticatedGuard],
       component: LoginLayout,
     },
 
