@@ -7,14 +7,23 @@ const authStore = useAuthStore();
 
 const router = useRouter();
 const route = useRoute();
-
+let redirectInProgress = false;
 authStore.$subscribe((_, state) => {
 
   if (state.authStatus === AuthStatus.Checking) {
     authStore.checkStatusAuth();
     return;
   }
-  if (route.name === 'login' && state.authStatus === AuthStatus.Autenticado) {
+
+  if (state.authStatus === AuthStatus.NoAutenticado) {
+    redirectInProgress = false;
+    return;
+  }
+
+  if (redirectInProgress) return
+
+  if ((route.name === 'login' || route.name === undefined) && state.authStatus === AuthStatus.Autenticado) {
+    redirectInProgress = true;
     router.replace({ name: 'main' });
     return;
   }
