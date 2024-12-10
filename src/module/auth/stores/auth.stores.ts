@@ -4,10 +4,12 @@ import { AuthStatus, type UsuarioBD } from "../interfaces";
 import { loginAction } from "../actions/login.action";
 import { useLocalStorage } from "@vueuse/core";
 import { RenewToken } from "../actions";
+import { useRouter } from "vue-router";
 
 export const useAuthStore = defineStore('auth', () => {
 
   const authStatus = ref(AuthStatus.Checking);
+  const router = useRouter();
 
   const user = ref<UsuarioBD | undefined>();
   const token = ref(useLocalStorage('token', ''));
@@ -42,6 +44,11 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = "";
   }
 
+  const onLogout = () => {
+    logout();
+    router.replace({ name: 'login' })
+  }
+
   const checkStatusAuth = async (): Promise<boolean> => {
     try {
       const statusResponse = await RenewToken();
@@ -70,6 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAuntenticado: computed(() => authStatus.value === AuthStatus.Autenticado),
     username: computed(() => user.value?.nombre),
     onLogin,
-    checkStatusAuth
+    checkStatusAuth,
+    onLogout
   }
 })

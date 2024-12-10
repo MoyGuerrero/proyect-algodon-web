@@ -81,7 +81,7 @@
       </ul>
     </div>
     <div class="p-4 bg-gray-200 dark:bg-gray-600">
-      <button type="button"
+      <button type="button" @click="authStore.onLogout()"
         class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="size-6">
@@ -95,7 +95,9 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/module/auth/stores/auth.stores';
 import { useSideBar } from '../composables/useSideBar';
+const authStore = useAuthStore();
 
 const { menus, isVisibleAside, openOptions, openOptions2 } = useSideBar();
 </script>

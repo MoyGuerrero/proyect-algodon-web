@@ -15,7 +15,7 @@ export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
   try {
 
     const localToken = localStorage.getItem('token');
-    if (localToken && localToken?.length < 10) {
+    if (!localToken) {
       return {
         ok: false
       };
