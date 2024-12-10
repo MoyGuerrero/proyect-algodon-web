@@ -92,7 +92,10 @@ const login = async () => {
 
   const success = await authStore.onLogin(myForm.usuario, myForm.clave);
 
-  if (success) return;
+  if (success) 
+  { toast.success("Bienvenido " + authStore.username);
+    return
+  };
 
   toast.error('Usuario/credenciales son incorrectas');
 

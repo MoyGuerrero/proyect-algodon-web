@@ -5,6 +5,7 @@ import { loginAction } from "../actions/login.action";
 import { useLocalStorage } from "@vueuse/core";
 import { RenewToken } from "../actions";
 import { useRouter } from "vue-router";
+//import { useToast } from "vue-toastification";
 
 export const useAuthStore = defineStore('auth', () => {
 
@@ -13,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const user = ref<UsuarioBD | undefined>();
   const token = ref(useLocalStorage('token', ''));
+  //const toast = useToast();
 
 
   const onLogin = async (usuario: string, clave: string) => {
@@ -28,6 +30,8 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = loginResp.token;
 
       authStatus.value = AuthStatus.Autenticado;
+      console.log("Hello world");
+      //toast.success("Bienvenido " + user.value.nombre);
 
       return true;
 

@@ -13,7 +13,7 @@ interface LoginSuccess {
 
 export const loginAction = async (usuario: string, clave: string): Promise<LoginError | LoginSuccess> => {
   try {
-
+console.log("ENTRAR A LOGIN ACTION");
     const { data } = await authAPi.post<AuthResponse>('/usuario/login', {
       usuario,
       clave
