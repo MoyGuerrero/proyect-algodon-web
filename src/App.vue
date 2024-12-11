@@ -2,6 +2,7 @@
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from './module/auth/stores/auth.stores';
 import { AuthStatus } from './module/auth/interfaces';
+import LoadingView from './module/common/components/LoadingView.vue';
 
 const authStore = useAuthStore();
 
@@ -34,7 +35,9 @@ authStore.$subscribe((_, state) => {
 </script>
 
 <template>
-  <RouterView />
+  <LoadingView v-if="authStore.isChecking" />
+  <RouterView v-else />
+
 </template>
 
 <style scoped></style>

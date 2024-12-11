@@ -1,5 +1,5 @@
 export interface AuthResponse {
-  usuarioBD: UsuarioBD;
+  usuarioBd: UsuarioBD;
   token: string;
 }
 

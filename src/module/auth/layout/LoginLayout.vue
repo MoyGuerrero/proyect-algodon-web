@@ -1,7 +1,7 @@
 <template>
   <div class="bg-sky-100 dark:bg-blue-900 flex justify-center items-center h-screen">
     <div class="w-1/2 h-screen hidden lg:block">
-      <img src="../../../assets/images/CottonPlant.jpg" alt="Cotto_Plan.jpg" class="object-cover w-full h-full">
+      <img :src="logo" alt="Cotto_Plan.jpg" class="object-cover w-full h-full">
     </div>
     <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
       <h1 class="text-5xl font-semibold mb-4 text-white">Bienvenido</h1>
@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import PadLockClosed from '../icons/PadLockClosed.vue';
 import PadLockOpen from '../icons/PadLockOpen.vue';
-
+import logo from '@/assets/images/CottonPlant.jpg';
 import { reactive, ref, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/auth.stores';
 import { useToast } from 'vue-toastification';
@@ -92,8 +92,8 @@ const login = async () => {
 
   const success = await authStore.onLogin(myForm.usuario, myForm.clave);
 
-  if (success) 
-  { toast.success("Bienvenido " + authStore.username);
+  if (success) {
+    toast.success("Bienvenido " + authStore.username);
     return
   };
 

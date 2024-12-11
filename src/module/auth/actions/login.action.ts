@@ -13,7 +13,6 @@ interface LoginSuccess {
 
 export const loginAction = async (usuario: string, clave: string): Promise<LoginError | LoginSuccess> => {
   try {
-console.log("ENTRAR A LOGIN ACTION");
     const { data } = await authAPi.post<AuthResponse>('/usuario/login', {
       usuario,
       clave
@@ -25,7 +24,7 @@ console.log("ENTRAR A LOGIN ACTION");
 
     return {
       ok: true,
-      user: data.usuarioBD,
+      user: data.usuarioBd,
       token: data.token
     }
 
@@ -37,6 +36,7 @@ console.log("ENTRAR A LOGIN ACTION");
         msg: 'Usuario o credenciales incorrectas'
       }
     }
+    // alert(JSON.stringify(error))
     console.log({ error });
 
     throw new Error("No se pudo realizar la petición")

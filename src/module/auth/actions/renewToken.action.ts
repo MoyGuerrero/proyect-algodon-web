@@ -24,7 +24,7 @@ export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
 
     return {
       ok: true,
-      user: data.usuarioBD,
+      user: data.usuarioBd,
       token: data.token
     }
 

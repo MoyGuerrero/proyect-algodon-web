@@ -30,8 +30,8 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = loginResp.token;
 
       authStatus.value = AuthStatus.Autenticado;
-      console.log("Hello world");
       //toast.success("Bienvenido " + user.value.nombre);
+      console.log(user.value);
 
       return true;
 
