@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import PadLockClosed from '../icons/PadLockClosed.vue';
 import PadLockOpen from '../icons/PadLockOpen.vue';
-import logo from '@/assets/images/CottonPlant.jpg';
+import logo from '@/assets/images/CottonPlant.png';
 import { reactive, ref, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/auth.stores';
 import { useToast } from 'vue-toastification';
