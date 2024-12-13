@@ -33,7 +33,7 @@
 
       <ul class="space-y-2 font-medium">
         <template v-for="menu in menus" :key="menu.id">
-          <template v-if="menu.subpath.length > 0">
+          <template v-if="menu.subpath && menu.subpath.length > 0">
             <button type="button" @click="openOptions(menu.id)"
               class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
@@ -45,7 +45,7 @@
             </button>
             <ul :id="'dropdown-example-' + menu.id" class="hidden py-2 space-y-2">
               <li v-for="children in menu.subpath" :key="children.id">
-                <template v-if="children.children?.length > 0">
+                <template v-if="children.children && children.children?.length > 0">
                   <button id="doubleDropdownButton" @click="openOptions2(children.id)"
                     data-dropdown-toggle="doubleDropdown" data-dropdown-placement="right-start" type="button"
                     class="flex items-center justify-between w-full text-white px-4 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 dark:hover:text-white">{{

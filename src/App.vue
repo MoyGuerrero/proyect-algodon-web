@@ -25,7 +25,7 @@ authStore.$subscribe((_, state) => {
 
   if ((route.name === 'login' || route.name === undefined) && state.authStatus === AuthStatus.Autenticado) {
     redirectInProgress = true;
-    router.replace({ name: 'main' });
+    router.replace({ name: localStorage.getItem('path') ?? 'main' });
     return;
   }
 

@@ -49,7 +49,7 @@ import PadLockOpen from '../icons/PadLockOpen.vue';
 import logo from '@/assets/images/CottonPlant.png';
 import { reactive, ref, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/auth.stores';
-import { useToast } from 'vue-toastification';
+// import { useToast } from 'vue-toastification';
 
 const authStore = useAuthStore()
 
@@ -63,7 +63,7 @@ const myForm = reactive({
 
 const claveInputRef = ref<HTMLInputElement | null>(null);
 const usuarioInputRef = ref<HTMLInputElement | null>(null);
-const toast = useToast();
+// const toast = useToast();
 const login = async () => {
 
   if (!myForm.usuario.trim().length) {
@@ -90,14 +90,7 @@ const login = async () => {
     localStorage.removeItem("usuario")
   }
 
-  const success = await authStore.onLogin(myForm.usuario, myForm.clave);
-
-  if (success) {
-    toast.success("Bienvenido " + authStore.username);
-    return
-  };
-
-  toast.error('Usuario/credenciales son incorrectas');
+  await authStore.onLogin(myForm.usuario, myForm.clave);
 
 }
 

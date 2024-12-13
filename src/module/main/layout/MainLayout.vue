@@ -30,6 +30,7 @@ watch(() => route.fullPath, (newFullPath) => {
   } else {
     fullPath.value = ""
   }
+  localStorage.setItem('path', newFullPath.split('/')[newFullPath.split('/').length - 1])
 });
 
 onMounted(() => {

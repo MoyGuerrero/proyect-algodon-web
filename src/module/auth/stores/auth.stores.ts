@@ -1,20 +1,20 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { AuthStatus, type UsuarioBD } from "../interfaces";
+import { AuthStatus, type Data } from "../interfaces";
 import { loginAction } from "../actions/login.action";
 import { useLocalStorage } from "@vueuse/core";
 import { RenewToken } from "../actions";
 import { useRouter } from "vue-router";
-//import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification";
 
 export const useAuthStore = defineStore('auth', () => {
 
   const authStatus = ref(AuthStatus.Checking);
   const router = useRouter();
 
-  const user = ref<UsuarioBD | undefined>();
+  const user = ref<Data | undefined>();
   const token = ref(useLocalStorage('token', ''));
-  //const toast = useToast();
+  const toast = useToast();
 
 
   const onLogin = async (usuario: string, clave: string) => {
@@ -23,6 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (!loginResp.ok) {
         logout();
+        toast.error(loginResp.msg)
         return false;
       }
 
@@ -30,8 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = loginResp.token;
 
       authStatus.value = AuthStatus.Autenticado;
-      //toast.success("Bienvenido " + user.value.nombre);
-      console.log(user.value);
+      toast.success("Bienvenido " + user.value.nombre);
 
       return true;
 
@@ -42,7 +42,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('token');
+    localStorage.removeItem('path')
     authStatus.value = AuthStatus.NoAutenticado
     user.value = undefined;
     token.value = "";

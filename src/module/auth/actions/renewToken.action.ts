@@ -1,12 +1,12 @@
 import { authAPi } from "@/api/authApi"
-import type { AuthResponse, UsuarioBD } from "../interfaces";
+import type { AuthResponse, Data } from "../interfaces";
 import { isAxiosError } from "axios";
 interface CheckError {
   ok: false,
 }
 interface CheckSuccess {
   ok: true,
-  user: UsuarioBD,
+  user: Data,
   token: string
 }
 
@@ -24,7 +24,7 @@ export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
 
     return {
       ok: true,
-      user: data.usuarioBd,
+      user: data.data,
       token: data.token
     }
 

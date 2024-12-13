@@ -1,13 +1,13 @@
 import { isAxiosError } from "axios";
 import { authAPi } from "../../../api/authApi"
-import type { AuthResponse, UsuarioBD } from "../interfaces/auth.response";
+import type { AuthResponse, Data } from "../interfaces/auth.response";
 interface LoginError {
   ok: false,
   msg: string
 }
 interface LoginSuccess {
   ok: true,
-  user: UsuarioBD,
+  user: Data,
   token: string
 }
 
@@ -24,16 +24,16 @@ export const loginAction = async (usuario: string, clave: string): Promise<Login
 
     return {
       ok: true,
-      user: data.usuarioBd,
+      user: data.data,
       token: data.token
     }
 
   } catch (error) {
 
-    if (isAxiosError(error) && error.status === 404) {
+    if (isAxiosError(error) && error.response!.status >= 400) {
       return {
         ok: false,
-        msg: 'Usuario o credenciales incorrectas'
+        msg: error.response?.data.message
       }
     }
     // alert(JSON.stringify(error))

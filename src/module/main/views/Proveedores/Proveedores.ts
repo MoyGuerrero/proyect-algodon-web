@@ -5,21 +5,25 @@ import * as yup from 'yup';
 import CustomInput from "@/components/CustomInput.vue";
 import { useRoute } from "vue-router";
 import ModalView from "../../components/ModalView.vue";
+import ButtonCustom from "@/components/ButtonCustom.vue";
+import LoadingCustom from "@/components/LoadingCustom.vue";
+import { addClient } from "../../actions";
+import { useToast } from "vue-toastification";
 
 
 const validationSchema = yup.object({
-  id: yup.number(),
-  razonSocial: yup.string().required(),
+  idcliente: yup.number(),
+  nombre: yup.string().required(),
   rfc: yup.string().required(),
   calle: yup.string().required(),
-  numExt: yup.string().required(),
+  numext: yup.string().required(),
   colonia: yup.string().required(),
-  cp: yup.string().required(),
+  codigopostal: yup.string().required(),
   municipio: yup.string().required(),
   estado: yup.string().required(),
   pais: yup.string().required(),
-  nombre: yup.string().required(),
-  email: yup.string().required().email(),
+  nombrecontacto: yup.string().required(),
+  mail: yup.string().required().email(),
   telefono: yup.string().required().min(10),
 });
 
@@ -27,50 +31,69 @@ const validationSchema = yup.object({
 export default defineComponent({
   components: {
     CustomInput,
-    ModalView
+    ModalView,
+    ButtonCustom,
+    LoadingCustom
   },
   setup() {
 
     const route = useRoute();
     const name = ref<string>("");
     const isOpenModal = ref<boolean>(false);
+    const isLoading = ref<boolean>(false);
+
+    const toast = useToast();
 
     const { defineField, errors, handleSubmit, resetForm } = useForm({
       validationSchema, initialValues: {
-        id: 0,
-        razonSocial: "",
+        idcliente: 0,
+        nombre: "",
         rfc: "",
         calle: "",
-        numExt: "",
+        numext: "",
         colonia: "",
-        cp: "",
+        codigopostal: "",
         municipio: "",
         estado: "",
         pais: "",
-        nombre: "",
-        email: "",
+        nombrecontacto: "",
+        mail: "",
         telefono: "",
       }
     });
 
 
-    const [id, idAttrs] = defineField('id');
-    const [razonSocial, razonSocialAttrs] = defineField('razonSocial');
+    const [idcliente, idclienteAttrs] = defineField('idcliente');
+    const [nombre, nombreAttrs] = defineField('nombre');
     const [rfc, rfcAttrs] = defineField('rfc');
     const [calle, calleAttrs] = defineField('calle');
-    const [numExt, numExtAttrs] = defineField('numExt');
+    const [numext, numextAttrs] = defineField('numext');
     const [colonia, coloniaAttrs] = defineField('colonia');
-    const [cp, cpAttrs] = defineField('cp');
+    const [codigopostal, codigopostalAttrs] = defineField('codigopostal');
     const [municipio, municipioAttrs] = defineField('municipio');
     const [estado, estadoAttrs] = defineField('estado');
     const [pais, paisAttrs] = defineField('pais');
-    const [nombre, nombreAttrs] = defineField('nombre');
-    const [email, emailAttrs] = defineField('email');
+    const [nombrecontacto, nombrecontactoAttrs] = defineField('nombrecontacto');
+    const [mail, mailAttrs] = defineField('mail');
     const [telefono, telefonoAttrs] = defineField('telefono');
 
 
-    const onSubmit = handleSubmit(values => {
-      console.log(values);
+    const onSubmit = handleSubmit(async values => {
+      isLoading.value = true;
+      if (name.value.includes('clientes')) {
+        const responseClient = await addClient(values);
+        if (!responseClient.ok) {
+          toast.error(responseClient.message);
+          isLoading.value = false;
+          return;
+        }
+
+        toast.success(responseClient.message);
+        resetForm();
+        isLoading.value = false;
+        return;
+      }
+
 
     })
 
@@ -80,43 +103,42 @@ export default defineComponent({
 
     watch(() => route.fullPath, (newName) => {
       const path = newName.split('/')[newName.split('/').length - 1];
-
       name.value = path;
       resetForm();
-
     });
 
     return {
-      id,
-      idAttrs,
-      razonSocial,
-      razonSocialAttrs,
+      idcliente,
+      idclienteAttrs,
+      nombre,
+      nombreAttrs,
       rfc,
       rfcAttrs,
       calle,
       calleAttrs,
-      numExt,
-      numExtAttrs,
+      numext,
+      numextAttrs,
       colonia,
       coloniaAttrs,
-      cp,
-      cpAttrs,
+      codigopostal,
+      codigopostalAttrs,
       municipio,
       municipioAttrs,
       estado,
       estadoAttrs,
       pais,
       paisAttrs,
-      nombre,
-      nombreAttrs,
-      email,
-      emailAttrs,
+      nombrecontacto,
+      nombrecontactoAttrs,
+      mail,
+      mailAttrs,
       telefono,
       telefonoAttrs,
 
       errors,
       isOpenModal,
       name,
+      isLoading,
       onSubmit,
     }
   }
