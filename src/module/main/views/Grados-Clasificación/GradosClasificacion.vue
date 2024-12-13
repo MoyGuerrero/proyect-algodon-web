@@ -17,21 +17,21 @@
         <label for="grade" class="form-label">Grade</label>
         <CustomInput v-model="grade" v-bind="gradeAttrs" :error="errors.grade" />
       </div>
-      <div>
-        <div class="flex gap-1">
-          <button-custom type="button" text="Clases" @click="isVisibleModal = true" />
-          <button-custom type="submit" text="Guardar" />
-        </div>
-      </div>
-      <div>
-        <div class="flex flex-row-reverse">
-          <button class="bg-green-600 px-3 py-2.5 rounded-full text-white" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </button>
+      <div class="col-span-2 gap-1">
+        <div class="flex justify-between items-center gap-1">
+          <div class="gap-3 flex">
+            <button-custom type="button" text="Clases" @click="isVisibleModal = true" />
+            <button-custom type="submit" text="Guardar" />
+          </div>
+          <div class="flex flex-row-reverse">
+            <button class="bg-green-600 px-3 py-2.5 rounded-full text-white" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 

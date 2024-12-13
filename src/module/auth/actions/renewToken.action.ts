@@ -13,6 +13,7 @@ interface CheckSuccess {
 
 export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
   try {
+    console.log("RenewToken");
 
     const localToken = localStorage.getItem('token');
     if (!localToken) {
@@ -29,7 +30,7 @@ export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
     }
 
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
+    if (isAxiosError(error) && error.response!.status >= 401) {
       return {
         ok: false,
       }

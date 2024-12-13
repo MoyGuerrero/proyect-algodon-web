@@ -28,7 +28,10 @@
           </svg>
           <span class="sr-only">Close menu</span>
         </button>
-
+      </div>
+      <div class="mb-5 block">
+        <span class="block text-white text-sm font-bold mb-2">Usuario</span>
+        <label class="block text-sm text-white font-bold mb-2">{{ authStore.username }}</label>
       </div>
 
       <ul class="space-y-2 font-medium">
