@@ -13,8 +13,6 @@ interface CheckSuccess {
 
 export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
   try {
-    console.log("RenewToken");
-
     const localToken = localStorage.getItem('token');
     if (!localToken) {
       return {

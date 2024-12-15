@@ -17,9 +17,9 @@
         <label for="grade" class="form-label">Grade</label>
         <CustomInput v-model="grade" v-bind="gradeAttrs" :error="errors.grade" />
       </div>
-      <div class="col-span-2 gap-1">
-        <div class="flex justify-between items-center gap-1">
-          <div class="gap-3 flex">
+      <div class="md:col-span-2 gap-1">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-1">
+          <div class="gap-1 flex flex-col md:flex-row w-full">
             <button-custom type="button" text="Clases" @click="isVisibleModal = true" />
             <button-custom type="submit" text="Guardar" />
           </div>

@@ -21,10 +21,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   open: boolean;
   texto?: string
-}>();
+}>(), {
+  texto: "Cargando...."
+});
 </script>
 
 <style scoped></style>

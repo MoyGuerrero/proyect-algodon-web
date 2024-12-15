@@ -1,0 +1,6 @@
+export * from './TableCustom.interface'
+export * from './clases.interface'
+export * from './grados_clasificacion.interface'
+export * from './menu.interface'
+export * from './perfilventadet.interface'
+export * from './perfilventaenc.interface'

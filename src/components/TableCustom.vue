@@ -44,7 +44,7 @@
           <td class="px-6 py-4" v-if="body.texto10 != null">
             {{ body.texto10 }}
           </td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4" v-if="isOptional">
             <span class="underline decoration-1 cursor-pointer" @click="$emit('click', body)">Seleccionar</span>
           </td>
         </tr>
@@ -60,7 +60,8 @@ import type { TBody } from '@/module/main/interfaces/TableCustom.interface';
 
 defineProps<{
   thead: string[],
-  cuerpo?: TBody[]
+  cuerpo?: TBody[],
+  isOptional: boolean
 }>();
 
 defineEmits(['click'])

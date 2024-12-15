@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input :type="type" :value="modelValue" :placeholder="placeholder"
+    <input :type="type" :value="modelValue" :placeholder="placeholder" :readonly="readonly"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value ?? '')" @blur="$emit('blur')"
       :class="['form-control', { 'border-red-500': error }]">
     <span class="text-red-400" v-if="error">{{ error }}</span>
@@ -11,12 +11,14 @@
 
 withDefaults(defineProps<{
   modelValue?: string | number;
-  type?: 'text' | 'email' | 'number' | 'date' | 'tel';
+  type?: 'text' | 'email' | 'number' | 'date' | 'tel' | 'datetime-local';
   placeholder?: string;
   title?: string;
   error?: string;
+  readonly?: boolean
 }>(), {
-  type: 'text'
+  type: 'text',
+  readonly: false
 })
 
 

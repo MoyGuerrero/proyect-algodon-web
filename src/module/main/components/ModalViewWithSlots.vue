@@ -43,7 +43,7 @@
               </div>
             </form>
 
-            <table-custom :thead="thead" :cuerpo="datos" @click="selectClass" />
+            <table-custom :thead="thead" :cuerpo="datos" @click="selectClass" :is-optional="true" />
           </div>
         </div>
       </div>

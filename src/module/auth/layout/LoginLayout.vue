@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-sky-100 dark:bg-blue-900 flex justify-center items-center h-screen">
+  <div class="bg-blue-900 dark:bg-blue-900 flex justify-center items-center h-screen">
     <div class="w-1/2 h-screen hidden lg:block">
       <img :src="logo" alt="Cotto_Plan.jpg" class="object-cover w-full h-full">
     </div>
@@ -34,7 +34,7 @@
         </div>
 
         <button
-          class="w-full dark:bg-green-600 text-center py-2.5 px-3 rounded-lg dark:text-white text-lg dark:hover:bg-green-800 cursor-pointer">
+          class="w-full bg-green-600 text-center py-2.5 px-3 rounded-lg text-white text-lg hover:bg-green-800 cursor-pointer">
           Iniciar sesión
           <!-- <>Iniciar sesión</> -->
         </button>

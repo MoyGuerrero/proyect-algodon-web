@@ -8,6 +8,7 @@ import TableCustom from '@/components/TableCustom.vue';
 import { getClases } from '../../actions';
 import { useToast } from 'vue-toastification';
 import type { TBody } from '../../interfaces/TableCustom.interface';
+import type { Datos } from '../../interfaces/clases.interface';
 
 
 export default defineComponent({
@@ -34,6 +35,7 @@ export default defineComponent({
     const openModal = ref<boolean>(false);
     const toast = useToast();
     const datos = ref<TBody[]>([]);
+    const getDatos = ref<Datos[]>([]);
 
     const [id_Clasificacion, id_ClasificacionAttrs] = defineField('id_clasificacion');
     const [grade, gradeAttrs] = defineField('grade');
@@ -46,7 +48,7 @@ export default defineComponent({
         toast.error(data.message);
         return;
       }
-
+      getDatos.value = data.datos;
       datos.value = data.datos.map(dato => {
         return {
           id: dato.idclasificacion,
