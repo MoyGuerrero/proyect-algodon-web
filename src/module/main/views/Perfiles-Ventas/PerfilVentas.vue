@@ -1,29 +1,32 @@
 <template>
   <div class="border shadow-lg p-4">
-    <form class="grid md:grid-cols-2 grid-cols-1 gap-4">
-
+    <form @submit="onSubmit" class="grid md:grid-cols-2 grid-cols-1 gap-4">
+      <div class="hidden">
+        <custom-input type="number" v-model="idperfilenc" v-bind="idperfilencAttrs" :error="errors.idperfilenc" />
+      </div>
       <div class="mb-4 md:col-span-2">
         <label class="form-label">Estatus</label>
-        <select class="form-control" v-model="estatus" v-bind="estatusAttrs">
+        <select class="form-control" v-model="idestatus" v-bind="idestatusAttrs">
           <option value="">Seleccione</option>
-          <option value="1">ACTIVO</option>
-          <option value="0">INACTIVO</option>
+          <option value="ACTIVO">ACTIVO</option>
+          <option value="INACTIVO">INACTIVO</option>
         </select>
-        <span class="text-red-400" v-if="errors.estatus">{{ errors.estatus }}</span>
+        <span class="text-red-400" v-if="errors.idestatus">{{ errors.idestatus }}</span>
       </div>
       <div class="mb-4">
         <label class="form-label">Fecha Creación</label>
-        <custom-input type="datetime-local" v-model="fechaCreacion" v-bind="fechaCreacionAttrs"
-          :error="errors.fechaCreacion" readonly />
+        <custom-input type="datetime-local" v-model="fechacreacion" v-bind="fechacreacionAttrs"
+          :error="errors.fechacreacion" readonly />
       </div>
       <div class="mb-4">
         <label class="form-label">Fecha Actualización</label>
-        <custom-input type="datetime-local" v-model="fechaActualizacion" v-bind="fechaActualizacionAttrs"
-          :error="errors.fechaActualizacion" readonly />
+        <custom-input type="datetime-local" v-model="fechaactualizacion" v-bind="fechaactualizacionAttrs"
+          :error="errors.fechaactualizacion" readonly />
       </div>
       <div class="mb-4 md:col-span-2">
         <label class="form-label">Descripción</label>
-        <text-area-custom rows="5" v-model="descripcion" v-bind="descripcionAttrs" :error="errors.descripcion" />
+        <!-- <text-area-custom rows="5" v-model="descripcion" v-bind="descripcionAttrs" :error="errors.descripcion" /> -->
+        <custom-input v-model="descripcion" v-bind="descripcionAttrs" :error="errors.descripcion" />
       </div>
       <div class="mb-4 md:col-span-2">
         <div class="flex md:flex-row-reverse flex-col gap-4">
@@ -38,7 +41,7 @@
 
 
     <span class="form-label">Detalles</span>
-    <table-custom :thead="theadDetalles" :cuerpo="Detalles" :is-optional="actionOption" />
+    <table-custom-with-input :thead="theadDetalles" :cuerpo="Detalles" @modal-update="updateModal" />
 
 
   </div>

@@ -6,8 +6,8 @@ export interface PerfilVentaDet {
 }
 
 export interface Data {
-  idperfildet: number;
-  idperfilenc: number;
+  idperfildet: number; //0
+  idperfilenc: number; // del returno del insert que se hizo primero
   idclasesenc: number;
   idclasificacion: number;
   descripcion: string;

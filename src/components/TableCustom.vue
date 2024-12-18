@@ -10,7 +10,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="bg-white border-b dark:border-gray-700" v-for="body in cuerpo" :key="body.id">
+        <tr class="bg-white border-b dark:border-gray-700" @dblclick="$emit('dblclick', body.id);" v-for="body in cuerpo"
+          :key="body.id">
           <td class="px-6 py-4">
             {{ body.id }}
           </td>
@@ -64,7 +65,7 @@ defineProps<{
   isOptional: boolean
 }>();
 
-defineEmits(['click'])
+defineEmits(['click', 'dblclick'])
 
 </script>
 

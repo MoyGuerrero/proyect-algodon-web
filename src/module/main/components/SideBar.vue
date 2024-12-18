@@ -63,9 +63,9 @@
                     <ul :id="'hijos_' + children.id" class="py-2 hidden text-sm text-gray-700 dark:text-gray-200"
                       aria-labelledby="doubleDropdownButton">
                       <li v-for="hijos in children.children" :key="hijos.id">
-                        <a href="#"
+                        <RouterLink :to="{ name: hijos.path }"
                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{
-                            hijos.name }}</a>
+                            hijos.name }}</RouterLink>
                       </li>
                     </ul>
                   </div>

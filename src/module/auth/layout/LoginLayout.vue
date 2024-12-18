@@ -33,7 +33,7 @@
           <label for="chkRecordarUsuario" class="block text-white">Recordar usuario</label>
         </div>
 
-        <button
+        <button :disabled="isDisabled"
           class="w-full bg-green-600 text-center py-2.5 px-3 rounded-lg text-white text-lg hover:bg-green-800 cursor-pointer">
           Iniciar sesión
           <!-- <>Iniciar sesión</> -->
@@ -49,11 +49,12 @@ import PadLockOpen from '../icons/PadLockOpen.vue';
 import logo from '@/assets/images/CottonPlant.png';
 import { reactive, ref, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/auth.stores';
-// import { useToast } from 'vue-toastification';
+
 
 const authStore = useAuthStore()
 
 const padlockOpen = ref<boolean>(false)
+const isDisabled = ref<boolean>(false)
 
 const myForm = reactive({
   usuario: '',
@@ -65,7 +66,7 @@ const claveInputRef = ref<HTMLInputElement | null>(null);
 const usuarioInputRef = ref<HTMLInputElement | null>(null);
 // const toast = useToast();
 const login = async () => {
-
+  isDisabled.value = true;
   if (!myForm.usuario.trim().length) {
     usuarioInputRef.value?.classList.add("border-red-400")
     usuarioInputRef.value?.classList.add("border-2")
@@ -91,7 +92,7 @@ const login = async () => {
   }
 
   await authStore.onLogin(myForm.usuario, myForm.clave);
-
+  isDisabled.value = false;
 }
 
 watchEffect(() => {

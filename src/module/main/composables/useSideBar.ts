@@ -26,9 +26,9 @@ export const useSideBar = () => {
         },
         {
           id: uuidv4(), name: 'Perfiles de deducción', path: 'clases', children: [
-            { id: uuidv4(), name: 'Perfil de micros', path: 'perfil-de-micros', children: [] },
-            { id: uuidv4(), name: 'Perfil de resistencia', path: 'perfil-de-resistencia', children: [] },
-            { id: uuidv4(), name: 'Perfil de uniformidad', path: 'perfil-de-uniformidad', children: [] },
+            { id: uuidv4(), name: 'Perfil de micros', path: 'perfil-micros', children: [] },
+            { id: uuidv4(), name: 'Perfil de resistencia', path: 'perfil-resistencia', children: [] },
+            { id: uuidv4(), name: 'Perfil de uniformidad', path: 'perfil-uniformidad', children: [] },
           ]
         },
         { id: uuidv4(), name: 'Perfiles de venta', path: 'perfiles-venta', children: [] },
