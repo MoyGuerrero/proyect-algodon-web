@@ -37,7 +37,7 @@
     </form>
 
     <span class="form-label">Perfiles</span>
-    <table-custom :thead="theadPerfiles" :cuerpo="perfiles" :is-optional="actionOption" />
+    <table-custom :thead="theadPerfiles" :cuerpo="perfiles" :is-optional="actionOption" @dblclick="getID" />
 
 
     <span class="form-label">Detalles</span>
@@ -45,7 +45,7 @@
 
 
   </div>
-  <LoadingCustom :open="isLoading" texto="Cargando" />
+  <LoadingCustom :open="isLoading" :texto="textLoading" />
 </template>
 
 <script src="./PerfilesVentas.ts" lang="ts"></script>

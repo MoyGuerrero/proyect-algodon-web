@@ -24,7 +24,7 @@
             <button-custom type="submit" text="Guardar" />
           </div>
           <div class="flex flex-row-reverse">
-            <button class="bg-green-600 px-3 py-2.5 rounded-full text-white" type="button">
+            <button class="bg-green-600 px-3 py-2.5 rounded-full text-white" type="button" @click="dowload">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"

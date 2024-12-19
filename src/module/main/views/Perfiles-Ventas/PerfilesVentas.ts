@@ -13,6 +13,8 @@ import { v4 as uuidv4 } from 'uuid';
 import TableCustomWithInput from "@/components/TableCustomWithInput.vue";
 import * as yup from 'yup';
 import { addPerfilVentaDet } from "../../actions/AddPerfilVentaDet";
+import { useToast } from "vue-toastification";
+import { addPerfilVentaEnc } from "../../actions/AddPerfilVenta";
 
 interface ModelUpdate {
   index: number;
@@ -38,16 +40,18 @@ export default defineComponent({
     LoadingCustom
   },
   setup() {
-    const isLoading = ref<boolean>(true);
+    const isLoading = ref<boolean>(false);
     const Detalles = ref<TBody[]>([]);
     const perfiles = ref<TBody[]>([]);
     const datosOriginales = ref<Data[]>([]);
+    const toast = useToast();
+    const textLoading = ref<string>("Cargando....");
 
     const date = new Date();
 
     const now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
     const actionOption = ref<boolean>(false)
-    const { defineField, errors, handleSubmit } = useForm({
+    const { defineField, errors, handleSubmit, handleReset, setValues } = useForm({
       validationSchema, initialValues: {
         idperfilenc: 0,
         descripcion: "",
@@ -63,33 +67,78 @@ export default defineComponent({
     const [fechaactualizacion, fechaactualizacionAttrs] = defineField('fechaactualizacion');
 
     onMounted(async () => {
-      const response = await perfilVentas(0);
-
-      if (!response.ok) return;
+      await value(0);
       isLoading.value = false;
-
-      perfiles.value = response.perfil2.map(per => {
-        return {
-          id: per.idperfilenc === 0 ? uuidv4() : per.idperfilenc,
-          texto1: per.descripcion,
-          texto2: per.estatus,
-          texto3: per.fechacreacion.toString().replace('T', ' ').split('.')[0],
-          input: -1
-        }
-      });
-
-      datosOriginales.value = response.perfil1;
-
-      Detalles.value = response.perfil1.map(det => {
-        return {
-          id: det.idclasificacion,
-          texto1: det.descripcion,
-          texto2: det.clave,
-          texto3: det.diferencial
-        }
-      });
-
     });
+
+    const value = async (id: number) => {
+
+      if (id === 0) {
+        const response = await perfilVentas(id);
+
+        if (!response.ok) return;
+        isLoading.value = false;
+
+        perfiles.value = response.perfil2.map(per => {
+          return {
+            id: per.idperfilenc === 0 ? uuidv4() : per.idperfilenc,
+            texto1: per.descripcion,
+            texto2: per.estatus,
+            texto3: per.fechacreacion.toString().replace('T', ' ').split('.')[0]
+          }
+        });
+
+        datosOriginales.value = response.perfil1;
+
+        Detalles.value = response.perfil1.map(det => {
+          return {
+            id: det.idclasificacion,
+            texto1: det.descripcion,
+            texto2: det.clave,
+            texto3: det.diferencial
+          }
+        });
+      } else {
+        const response = await perfilVentas(id);
+
+        if (!response.ok) return;
+        isLoading.value = false;
+
+        perfiles.value = response.perfil2.map(per => {
+          return {
+            id: per.idperfilenc === 0 ? uuidv4() : per.idperfilenc,
+            texto1: per.descripcion,
+            texto2: per.estatus,
+            texto3: per.fechacreacion.toString().replace('T', ' ').split('.')[0]
+          }
+        });
+
+        const handleFrom = response.perfil2.filter(p => p.idperfilenc === id);
+        const values = handleFrom.map(hf => {
+          return {
+            idperfilenc: hf.idperfilenc,
+            descripcion: hf.descripcion,
+            idestatus: hf.estatus,
+            fechacreacion: hf.fechacreacion.toString(),
+            fechaactualizacion: hf.fechaactualizacion.toString()
+          }
+        });
+        setValues(values[0]);
+
+
+        datosOriginales.value = response.perfil1;
+
+        Detalles.value = response.perfil1.map(det => {
+          return {
+            id: det.idclasificacion,
+            texto1: det.descripcion,
+            texto2: det.clave,
+            texto3: det.diferencial
+          }
+        });
+      }
+
+    }
 
     const updateModal = (data: ModelUpdate) => {
 
@@ -100,34 +149,50 @@ export default defineComponent({
     }
 
     const onSubmit = handleSubmit(async values => {
-      console.log(values);
+      isLoading.value = true;
+      console.log('Inicio de guardado');
+
+      textLoading.value = "Guardando....."
       const newValues = {
         ...values,
         idestatus: "ACTIVO" == values.idestatus ? 1 : 0,
       }
-      console.log(newValues);
-      saveDet(1)
 
+      const response = await addPerfilVentaEnc(newValues);
+
+      if (!response.ok) {
+        toast.error(response.message);
+        isLoading.value = false;
+        return;
+      }
+      await saveDet(response.id);
+      await value(0);
+      toast.success(response.message);
+      // isLoading.value = false;
     });
 
 
-    const saveDet = (id: number) => {
-      console.log({ id });
+    const saveDet = async (id: number) => {
+      const datosDetalles = datosOriginales.value.map(item => ({
+        idperfildet: item.idperfildet,
+        idperfilenc: id,
+        idclasesenc: item.idclasesenc,
+        diferencial: item.diferencial,
+      }));
 
-      if (id > 0) {
-        const datosDetalles = datosOriginales.value.map(item => ({
-          idperfildet: 0,
-          idperfilenc: id,
-          idclasesenc: item.idclasesenc,
-          diferencial: item.diferencial,
-        }));
-        console.log(datosOriginales.value);
-        console.log({ datosDetalles });
-        addPerfilVentaDet(datosDetalles);
+      const response = await addPerfilVentaDet(datosDetalles);
+
+      if (!response.ok) {
         return
       }
+      isLoading.value = false;
+      handleReset();
+    }
 
-
+    const getID = async (id: number) => {
+      isLoading.value = true;
+      await value(id);
+      isLoading.value = false;
     }
 
     return {
@@ -146,8 +211,10 @@ export default defineComponent({
       Detalles,
       perfiles,
       actionOption,
+      textLoading,
       updateModal,
       onSubmit,
+      getID,
       theadPerfiles: computed(() => ['ID', 'Descripción', 'Estatus', 'Fecha Creación']),
       theadDetalles: computed(() => ['ID Clasificación', 'Descripción', 'Clave', 'Diferencial']),
     }

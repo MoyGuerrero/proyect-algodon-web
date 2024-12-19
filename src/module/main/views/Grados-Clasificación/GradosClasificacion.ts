@@ -10,6 +10,7 @@ import { getGradosClasificacion } from '../../actions/grados_clasificacion.actio
 import type { DatosGrados } from '../../interfaces/grados_clasificacion.interface';
 import TableCustom from '@/components/TableCustom.vue';
 import LoadingCustom from '@/components/LoadingCustom.vue';
+import { dowloadGC } from '../../actions';
 
 const validationSchema = yup.object({
   grados: yup.string().required(),
@@ -51,6 +52,11 @@ export default defineComponent({
 
     });
 
+
+    const dowload = async () => {
+      await dowloadGC();
+    }
+
     return {
       grados,
       gradosAttrs,
@@ -64,7 +70,8 @@ export default defineComponent({
       datos, //<--- Esta variable reactiva es el encargado de cargar los datos en la tabla.
       isLoading,
       errors,
-      router
+      router,
+      dowload
     }
   }
 });
