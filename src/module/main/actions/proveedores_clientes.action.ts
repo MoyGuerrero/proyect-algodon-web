@@ -17,13 +17,29 @@ interface Clientes {
   telefono: string;
 }
 
+interface Proveedor {
+  Idcomprador: number;
+  nombre: string;
+  rfc: string;
+  calle: string;
+  numext: string;
+  colonia: string;
+  codigopostal: string;
+  municipio: string;
+  estado: string;
+  pais: string;
+  nombrecontacto: string;
+  mail: string;
+  telefono: string;
+}
+
 interface SuccessOrFailed {
   ok: boolean,
   message: string
 }
-export const addClient = async (cliente: Clientes): Promise<SuccessOrFailed> => {
+export const addClient = async (cliente: Clientes | Proveedor, endPoint: string): Promise<SuccessOrFailed> => {
   try {
-    const { data } = await authAPi.post('/catalogos/agregar_cliente', cliente, {
+    const { data } = await authAPi.post('/catalogos/' + endPoint, cliente, {
       headers: {
         'Content-Type': 'application/json'
       }

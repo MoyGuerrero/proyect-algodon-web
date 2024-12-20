@@ -27,6 +27,12 @@
         <custom-input type="datetime-local" readonly v-model="fechaactualizacion" v-bind="fechaactualizacionAttrs"
           :error="errors.fechaactualizacion" />
       </div>
+
+      <div class="md:col-span-3">
+        <label class="form-label">Descripción</label>
+        <custom-input type="text" readonly v-model="descripcion" v-bind="descripcionAttrs"
+          :error="errors.descripcion" />
+      </div>
     </form>
   </div>
 </template>

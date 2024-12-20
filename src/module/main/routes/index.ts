@@ -9,8 +9,10 @@ export const mainRoutes: RouteRecordRaw = {
   path: '/main',
   name: 'main',
   beforeEnter: [isAuthenticatedGuard],
+  redirect: { name: 'home' },
   component: () => import('@/module/main/layout/MainLayout.vue'),
   children: [
+    { path: 'home', name: 'home', component: () => import('@/module/main/views/home/HomeView.vue') },
     { path: 'proveedores', name: 'proveedores', component: () => import('@/module/main/views/Proveedores/ProveedoresView.vue') },
     { path: 'clientes', name: 'clientes', component: () => import('@/module/main/views/Proveedores/ProveedoresView.vue') },
     { path: 'grados-clasificacion', name: 'grados-clasificacion', component: () => import('@/module/main/views/Grados-Clasificación/GradosClasificacion.vue') },

@@ -51,7 +51,7 @@ export default defineComponent({
 
     const now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
     const actionOption = ref<boolean>(false)
-    const { defineField, errors, handleSubmit, handleReset, setValues } = useForm({
+    const { defineField, errors, handleSubmit, setValues } = useForm({
       validationSchema, initialValues: {
         idperfilenc: 0,
         descripcion: "",
@@ -166,7 +166,7 @@ export default defineComponent({
         return;
       }
       await saveDet(response.id);
-      await value(0);
+      await value(response.id);
       toast.success(response.message);
       // isLoading.value = false;
     });
@@ -186,7 +186,7 @@ export default defineComponent({
         return
       }
       isLoading.value = false;
-      handleReset();
+      // handleReset();
     }
 
     const getID = async (id: number) => {

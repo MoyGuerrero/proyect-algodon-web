@@ -12,7 +12,7 @@
       <tbody>
         <tr class="bg-white border-b dark:border-gray-700 cursor-pointer" @dblclick="$emit('dblclick', body.id);"
           v-for="body in cuerpo" :key="body.id">
-          <td class="px-6 py-4">
+          <td class="px-6 py-4" v-if="isViewID">
             {{ body.id }}
           </td>
           <td class="px-6 py-4" v-if="body.texto1 != null">
@@ -45,6 +45,21 @@
           <td class="px-6 py-4" v-if="body.texto10 != null">
             {{ body.texto10 }}
           </td>
+          <td class="px-6 py-4" v-if="body.texto11 != null">
+            {{ body.texto11 }}
+          </td>
+          <td class="px-6 py-4" v-if="body.texto12 != null">
+            {{ body.texto12 }}
+          </td>
+          <td class="px-6 py-4" v-if="body.texto13 != null">
+            {{ body.texto13 }}
+          </td>
+          <td class="px-6 py-4" v-if="body.texto14 != null">
+            {{ body.texto14 }}
+          </td>
+          <td class="px-6 py-4" v-if="body.texto15 != null">
+            {{ body.texto15 }}
+          </td>
           <td class="px-6 py-4" v-if="isOptional">
             <span class="underline decoration-1 cursor-pointer" @click="$emit('click', body)">Seleccionar</span>
           </td>
@@ -59,11 +74,14 @@
 import type { TBody } from '@/module/main/interfaces/TableCustom.interface';
 
 
-defineProps<{
+withDefaults(defineProps<{
   thead: string[],
   cuerpo?: TBody[],
-  isOptional: boolean
-}>();
+  isOptional: boolean,
+  isViewID?: boolean
+}>(), {
+  isViewID: true
+});
 
 defineEmits(['click', 'dblclick'])
 

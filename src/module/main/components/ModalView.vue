@@ -23,7 +23,10 @@
           <!-- Modal body -->
           <div class="p-4 md:p-5 space-y-4">
             <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-              Aqui va la tabla con la informacion de proveedores o clientes
+              <input type="text" placeholder="Buscar...."
+                @input="$emit('modalUpdate', ($event.target as HTMLInputElement).value ?? 'f')"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+              <TableCustom :thead="cabeceras" :cuerpo="cuerpo" :isViewID="false" :is-optional="false" />
             </p>
           </div>
         </div>
@@ -35,14 +38,19 @@
 </template>
 
 <script setup lang="ts">
+import TableCustom from '@/components/TableCustom.vue';
+import type { TBody } from '../interfaces';
+
 
 const props = defineProps<{
   open: boolean;
-  tipo?: string
+  tipo?: string;
+  cabeceras: string[],
+  cuerpo?: TBody[]
 }>();
 
 
-defineEmits(['click']);
+defineEmits(['click', 'modalUpdate']);
 
 
 </script>

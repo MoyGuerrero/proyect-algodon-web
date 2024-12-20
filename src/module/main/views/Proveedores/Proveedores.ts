@@ -1,5 +1,6 @@
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { useForm } from "vee-validate"
+import debounce from 'lodash/debounce';
 import * as yup from 'yup';
 
 import CustomInput from "@/components/CustomInput.vue";
@@ -7,8 +8,9 @@ import { useRoute } from "vue-router";
 import ModalView from "../../components/ModalView.vue";
 import ButtonCustom from "@/components/ButtonCustom.vue";
 import LoadingCustom from "@/components/LoadingCustom.vue";
-import { addClient } from "../../actions";
+import { addClient, getClientes } from "../../actions";
 import { useToast } from "vue-toastification";
+import type { TBody } from "../../interfaces";
 
 
 const validationSchema = yup.object({
@@ -41,6 +43,7 @@ export default defineComponent({
     const name = ref<string>("");
     const isOpenModal = ref<boolean>(false);
     const isLoading = ref<boolean>(false);
+    const ClientAndProveedor = ref<TBody[]>([]);
 
     const toast = useToast();
 
@@ -81,7 +84,7 @@ export default defineComponent({
     const onSubmit = handleSubmit(async values => {
       isLoading.value = true;
       if (name.value.includes('clientes')) {
-        const responseClient = await addClient(values);
+        const responseClient = await addClient(values, 'agregar_cliente');
         if (!responseClient.ok) {
           toast.error(responseClient.message);
           isLoading.value = false;
@@ -90,22 +93,95 @@ export default defineComponent({
 
         toast.success(responseClient.message);
         resetForm();
-        isLoading.value = false;
-        return;
-      }
+      } else {
+        const responseClient = await addClient(values, 'agregar_proveedor');
+        if (!responseClient.ok) {
+          toast.error(responseClient.message);
+          isLoading.value = false;
+          return;
+        }
 
+        toast.success(responseClient.message);
+        resetForm();
+      }
+      isLoading.value = false;
 
     })
 
-    onMounted(() => {
+    onMounted(async () => {
       name.value = route.fullPath.split('/')[route.fullPath.split('/').length - 1];
+
+      if (name.value.includes('clientes')) {
+        await loadData(-1, 'f', 'getClientes');
+      } else {
+        await loadData(-1, 'f', 'getProveedor');
+      }
     });
 
-    watch(() => route.fullPath, (newName) => {
+    watch(() => route.fullPath, async (newName) => {
+      isLoading.value = true;
       const path = newName.split('/')[newName.split('/').length - 1];
       name.value = path;
       resetForm();
+      ClientAndProveedor.value.length = 0;
+      if (name.value.includes('clientes')) {
+        await loadData(-1, 'f', 'getClientes');
+      } else {
+        await loadData(-1, 'f', 'getProveedor');
+      }
+      isLoading.value = false;
     });
+
+    const loadData = async (idcliente: number = -1, nombre: string = 'f', endpoint: string) => {
+      const response = await getClientes(idcliente, nombre, endpoint);
+
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
+
+      ClientAndProveedor.value = response.datos.map(d => {
+        return {
+          id: d.idcliente,
+          texto1: d.nombre,
+          texto2: d.rfc,
+          texto3: d.calle,
+          texto4: d.numext,
+          texto5: d.colonia,
+          texto6: d.codigopostal,
+          texto7: d.municipio,
+          texto8: d.estado,
+          texto9: d.pais,
+          texto10: d.nombrecontacto,
+          texto11: d.mail,
+          texto12: d.telefono,
+        }
+      });
+    }
+
+    const onDebounce = (value: string) => {
+      console.log(value);
+
+      debouncedSearch(value)
+    }
+
+    const debouncedSearch = debounce(async (value: string) => {
+      const id = value == '' ? -1 : 0;
+      const word = value == '' ? 'f' : value;
+      if (name.value.includes('clientes')) {
+        await loadData(id, word, 'getClientes');
+      } else {
+        await loadData(id, word, 'getProveedor');
+
+      }
+    }, 500);
+
+
+    const consultar = async () => {
+      const endpoint = name.value.includes('clientes') ? 'getClientes' : 'getProveedor';
+      await loadData(-1, 'f', endpoint);
+      isOpenModal.value = true
+    }
 
     return {
       idcliente,
@@ -139,7 +215,11 @@ export default defineComponent({
       isOpenModal,
       name,
       isLoading,
+      ClientAndProveedor,
+      cabecera: computed(() => ['Nombre', 'RFC', 'Calle', 'Num Ext', 'Colonia', 'Codigo Postal', 'Municipio', 'Estado', 'Pais', 'Nombre del contacto', 'Correo electronico', 'Telefono']),
       onSubmit,
+      onDebounce,
+      consultar,
     }
   }
 });

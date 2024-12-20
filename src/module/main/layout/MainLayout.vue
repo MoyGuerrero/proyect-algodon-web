@@ -25,12 +25,18 @@ const route = useRoute();
 const fullPath = ref<string>("");
 
 watch(() => route.fullPath, (newFullPath) => {
-  if (newFullPath.split('/').length > 2) {
+  console.log(newFullPath.includes('home'));
+
+  if (newFullPath.split('/').length > 2 && !newFullPath.includes('home')) {
     fullPath.value = getPathBreadCrumbs(newFullPath);
   } else {
     fullPath.value = ""
   }
-  localStorage.setItem('path', newFullPath.split('/')[newFullPath.split('/').length - 1])
+  if (newFullPath.split('/')[newFullPath.split('/').length - 1] != 'home') {
+    localStorage.setItem('path', newFullPath.split('/')[newFullPath.split('/').length - 1])
+  } else {
+    localStorage.removeItem('path');
+  }
 });
 
 onMounted(() => {

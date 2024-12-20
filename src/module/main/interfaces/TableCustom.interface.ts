@@ -13,4 +13,9 @@ export interface TBody {
   texto8?: number | string | null,
   texto9?: number | string | null,
   texto10?: number | string | null,
+  texto11?: number | string | null,
+  texto12?: number | string | null,
+  texto13?: number | string | null,
+  texto14?: number | string | null,
+  texto15?: number | string | null,
 }
