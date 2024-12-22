@@ -1,9 +1,12 @@
 <template>
   <div class="border shadow-2xl p-4">
-    <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form @submit="onSubmit" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="mb-4 hidden">
+        <CustomInput v-model="Idgradosclasificacion" v-bind="IdgradosclasificacionAttrs" />
+      </div>
       <div class="mb-4">
         <label for="grado" class="form-label">Grado</label>
-        <CustomInput v-model="grados" v-bind="gradosAttrs" :error="errors.grados" />
+        <CustomInput v-model="gradocolor" v-bind="gradocolorAttrs" :error="errors.gradocolor" />
       </div>
       <div class="mb-4">
         <label for="trashId" class="form-label">Trash ID</label>
@@ -11,11 +14,17 @@
       </div>
       <div class="mb-4">
         <label for="color" class="form-label">Color</label>
-        <CustomInput v-model="color" v-bind="colorAttrs" :error="errors.color" />
+        <CustomInput v-model="descripcion" v-bind="descripcionAttrs" :error="errors.descripcion" />
       </div>
       <div class="mb-4">
         <label for="grade" class="form-label">Grade</label>
-        <CustomInput v-model="grade" v-bind="gradeAttrs" :error="errors.grade" />
+        <!-- <CustomInput v-model="grade" v-bind="gradeAttrs" :error="errors.grade" /> -->
+        <select v-model="idclase" v-bind="idclaseAttrs"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
+          <option value="">-- Seleccionar --</option>
+          <option v-for="g in grades" :key="g.id" :value="g.id">{{ g.clave }}</option>
+        </select>
+        <span class="text-red-400" v-if="errors.idclase">{{ errors.idclase }}</span>
       </div>
       <div class="md:col-span-2 gap-1">
         <div class="flex flex-col md:flex-row justify-between items-center gap-1">
@@ -25,11 +34,12 @@
           </div>
           <div class="flex flex-row-reverse">
             <button class="bg-green-600 px-3 py-2.5 rounded-full text-white" type="button" @click="dowload">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
+
             </button>
           </div>
         </div>
@@ -38,8 +48,6 @@
       <!-- <button type="submit"
         class="dark:bg-green-600 block py-2 rounded-xl md:w-32 w-full text-sm dark:text-white dark:hover:bg-green-800 font-semibold">Guardar</button> -->
     </form>
-
-
 
     <div class="relative overflow-x-auto mt-4 overflow-y-auto h-96">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -60,7 +68,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="bg-white border-b dark:border-gray-700" v-for="dato in datos" :key="dato.idgradosclasificacion">
+          <tr class="bg-white border-b dark:border-gray-700 cursor-pointer" @dblclick="edit(dato.idgradosclasificacion)"
+            v-for="dato in datos" :key="dato.idgradosclasificacion">
             <td class="px-6 py-4">
               {{ dato.gradocolor }}
             </td>
@@ -79,7 +88,7 @@
     </div>
 
   </div>
-  <LoadingCustom :open="isLoading" texto="Cargando" />
+  <LoadingCustom :open="isLoading" :texto="textLoading" />
   <modal-view-with-slots :open="isVisibleModal" @click="isVisibleModal = !isVisibleModal"></modal-view-with-slots>
 </template>
 

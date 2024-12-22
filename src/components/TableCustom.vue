@@ -61,7 +61,7 @@
             {{ body.texto15 }}
           </td>
           <td class="px-6 py-4" v-if="isOptional">
-            <span class="underline decoration-1 cursor-pointer" @click="$emit('click', body)">Seleccionar</span>
+            <span class="underline decoration-1 cursor-pointer" @click="$emit('click', body.id)">Seleccionar</span>
           </td>
         </tr>
       </tbody>

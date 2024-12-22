@@ -3,15 +3,16 @@
     <form class=" grid grid-cols-1 md:grid-cols-2 gap-2">
       <div class="mb-4">
         <label for="id_clasificacion" class="form-label">ID Clasificación</label>
-        <custom-input v-bind="id_ClasificacionAttrs" v-model="id_Clasificacion" :error="errors.id_Clasificacion" />
+        <custom-input v-bind="idclasificacionAttrs" v-model="idclasificacion" :error="errors.idclasificacion" />
       </div>
       <div class="mb-4">
         <label for="grade" class="form-label">Grade</label>
-        <custom-input v-bind="gradeAttrs" v-model="grade" :error="errors.grade" />
+        <custom-input v-bind="claveAttrs" v-model="clave" :error="errors.clave" />
       </div>
       <div class="mb-4 md:col-span-2">
         <label for="grade" class="form-label">Descripción</label>
-        <text-area-custom v-bind="descripcionAttrs" v-model="descripcion" rows="5" :error="errors.descripcion" />
+        <custom-input v-bind="DescripcionAttrs" v-model="Descripcion" :error="errors.Descripcion" />
+        <!-- <text-area-custom v-bind="DescripcionAttrs" v-model="Descripcion" rows="5" :error="errors.Descripcion" /> -->
       </div>
       <div class="md:col-span-2 w-full">
         <div class="flex flex-col md:flex-row justify-between items-center gap-3">

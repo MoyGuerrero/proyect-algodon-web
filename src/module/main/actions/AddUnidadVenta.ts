@@ -48,7 +48,4 @@ export const agregarUnidadVenta = async (venta: VentaUnidad): Promise<SuccessorF
 
     throw new Error("Succedio un error hablar con el administrador del sistema");
   }
-
-
-
 }
