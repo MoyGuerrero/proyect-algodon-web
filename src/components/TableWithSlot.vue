@@ -10,7 +10,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="bg-white border-b dark:border-gray-700 cursor-pointer text-center"
+        <slot name="body" />
+        <!-- <tr class="bg-white border-b dark:border-gray-700 cursor-pointer text-center"
           @dblclick="$emit('dblclick', body.id);" v-for="body in cuerpo" :key="body.id">
           <td class="px-6 py-4" v-if="isViewID">
             {{ body.id }}
@@ -72,82 +73,16 @@
               </svg>
             </button>
           </td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>
-
-  <ModalConfirmation :open="open">
-    <template #header>
-      <h3 class="text-xl font-semibold text-gray-900 dark:text-white capitalize">
-        ¿Estas seguro que deseas actualizar este perfil?
-      </h3>
-      <button type="button" @click="open = false"
-        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-        data-modal-hide="default-modal">
-        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-        </svg>
-        <span class="sr-only">Close modal</span>
-      </button>
-    </template>
-    <template #body>
-      <div class="flex flex-col justify-center items-center gap-4">
-        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">Nombre del perfil </p>
-        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">{{ descripcion }} </p>
-        <div class="flex justify-between items-center gap-4">
-          <button @click="open = false"
-            class="bg-red-600 md:py-2 py-4 px-3 rounded-lg text-white md:w-32 text-sm hover:bg-red-800 w-full font-semibold">Cancelar</button>
-          <ButtonCustom type="button" text="Aceptar" @click="actualizar" />
-        </div>
-      </div>
-    </template>
-  </ModalConfirmation>
-
 </template>
 
 <script setup lang="ts">
-import ModalConfirmation from '@/module/main/components/ModalConfirmation.vue';
-import type { TBody } from '@/module/main/interfaces/TableCustom.interface';
-import ButtonCustom from '@/components/ButtonCustom.vue';
-import { ref, watch } from 'vue';
-const open = ref<boolean>(false);
-const descripcion = ref<string | number | null>('');
-const id = ref<string | number>('');
-
-const props = withDefaults(defineProps<{
+defineProps<{
   thead: string[],
-  cuerpo?: TBody[],
-  isOptional?: boolean,
-  isViewID?: boolean,
-  isAction?: boolean,
-  closedModal?: boolean
-}>(), {
-  isViewID: true,
-  isAction: false
-});
-
-const emit = defineEmits(['click', 'dblclick', 'updateStatus']);
-
-const actualizar = () => {
-  emit('updateStatus', id.value);
-  open.value = false;
-}
-
-// $emit('updateStatus', id)
-const openModal = (data: TBody) => {
-  open.value = true;
-  if (data.texto1) {
-    id.value = data.id;
-    descripcion.value = data.texto1;
-  }
-}
-
-watch(() => props.closedModal, (newValue) => {
-  open.value = newValue;
-})
-
+}>()
 </script>
 
 <style scoped></style>

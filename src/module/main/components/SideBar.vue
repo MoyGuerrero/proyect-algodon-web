@@ -13,7 +13,7 @@
   <aside id="sidebar-multi-level-sidebar"
     class="fixed top-0 left-0 z-40 w-64 h-full transition-transform sm:translate-x-0 flex flex-col justify-between"
     :class="{ '-translate-x-full': isVisibleAside }" aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-600">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-600 dark:bg-gray-600">
       <div class="mb-5 sm:hidden block">
         <h5 id="drawer-navigation-label" class="text-base font-semibold text-white uppercase dark:text-gray-400">Menu
         </h5>

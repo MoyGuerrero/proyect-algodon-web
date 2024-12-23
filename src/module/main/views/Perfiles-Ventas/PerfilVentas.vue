@@ -31,16 +31,17 @@
       <div class="mb-4 md:col-span-2">
         <div class="flex md:flex-row-reverse flex-col gap-4">
           <button-custom :type="'submit'" text="Guardar" />
-          <button-custom :type="'button'" text="Nuevo" />
+          <button-custom :type="'button'" @click="resetForm" text="Nuevo" />
         </div>
       </div>
     </form>
 
     <span class="form-label">Perfiles</span>
-    <table-custom :thead="theadPerfiles" :cuerpo="perfiles" :is-optional="actionOption" @dblclick="getID" />
+    <table-custom :thead="theadPerfiles" :cuerpo="perfiles" :is-optional="actionOption" @dblclick="getID"
+      @update-status="cambioEstatus" :closedModal="closedModal" :is-action="true" ; />
 
-
-    <span class="form-label">Detalles</span>
+    <hr>
+    <span class="form-label mt-4">Detalles</span>
     <table-custom-with-input :thead="theadDetalles" :cuerpo="Detalles" @modal-update="updateModal" />
 
 

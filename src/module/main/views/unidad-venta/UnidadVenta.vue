@@ -39,7 +39,8 @@
 
       <div class="md:col-span-4">
         <label class="form-label">Descripción</label>
-        <text-area-custom v-model="descripcion" type="text" v-bind="descripcionAttrs" :error="errors.descripcion" />
+        <custom-input v-model="descripcion" type="text" v-bind="descripcionAttrs" :error="errors.descripcion" />
+        <!-- <text-area-custom v-model="descripcion" type="text" v-bind="descripcionAttrs" :error="errors.descripcion" /> -->
       </div>
 
       <div class="md:col-span-4">

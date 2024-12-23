@@ -20,6 +20,7 @@ export const mainRoutes: RouteRecordRaw = {
     { path: 'perfil-micros', name: 'perfil-micros', component: () => import('@/module/main/views/perfiles/PerfilesDeduccion.vue') },
     { path: 'perfil-resistencia', name: 'perfil-resistencia', component: () => import('@/module/main/views/perfiles/PerfilesDeduccion.vue') },
     { path: 'perfil-uniformidad', name: 'perfil-uniformidad', component: () => import('@/module/main/views/perfiles/PerfilesDeduccion.vue') },
+    { path: 'perfil-uhml', name: 'perfil-uhml', component: () => import('@/module/main/views/perfiles/PerfilesDeduccion.vue') },
     { path: 'perfiles-venta', name: 'perfiles-venta', component: () => import('@/module/main/views/Perfiles-Ventas/PerfilVentas.vue') },
     { path: 'unidad-venta', name: 'unidad-venta', component: () => import('@/module/main/views/unidad-venta/UnidadVenta.vue') },
     { path: 'recibas', name: 'recibas', component: () => import('@/module/main/views/Proveedores/ProveedoresView.vue') },

@@ -8,7 +8,7 @@ import TextAreaCustom from "@/components/TextAreaCustom.vue";
 import LoadingCustom from "@/components/LoadingCustom.vue";
 
 import { perfilVentas } from "../../actions/perfilesventas.action";
-import type { Data, TBody } from "../../interfaces";
+import type { Data, datosEnc, TBody } from "../../interfaces";
 import { v4 as uuidv4 } from 'uuid';
 import TableCustomWithInput from "@/components/TableCustomWithInput.vue";
 import * as yup from 'yup';
@@ -44,14 +44,16 @@ export default defineComponent({
     const Detalles = ref<TBody[]>([]);
     const perfiles = ref<TBody[]>([]);
     const datosOriginales = ref<Data[]>([]);
+    const datosActualizar = ref<datosEnc[]>([]);
     const toast = useToast();
+    const closedModal = ref<boolean>(true)
     const textLoading = ref<string>("Cargando....");
 
     const date = new Date();
 
     const now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
     const actionOption = ref<boolean>(false)
-    const { defineField, errors, handleSubmit, setValues } = useForm({
+    const { defineField, errors, handleSubmit, setValues, handleReset } = useForm({
       validationSchema, initialValues: {
         idperfilenc: 0,
         descripcion: "",
@@ -78,7 +80,8 @@ export default defineComponent({
 
         if (!response.ok) return;
         isLoading.value = false;
-
+        // console.log(response.perfil2);
+        datosActualizar.value = response.perfil2;
         perfiles.value = response.perfil2.map(per => {
           return {
             id: per.idperfilenc === 0 ? uuidv4() : per.idperfilenc,
@@ -112,6 +115,7 @@ export default defineComponent({
             texto3: per.fechacreacion.toString().replace('T', ' ').split('.')[0]
           }
         });
+
 
         const handleFrom = response.perfil2.filter(p => p.idperfilenc === id);
         const values = handleFrom.map(hf => {
@@ -195,6 +199,34 @@ export default defineComponent({
       isLoading.value = false;
     }
 
+    const cambioEstatus = async (id: number) => {
+      const actualizar = datosActualizar.value.filter(da => da.idperfilenc === id);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { estatus, fechaactualizacion, fechacreacion, ...params } = actualizar[0];
+      const update = {
+        ...params,
+        fechaactualizacion: fechaactualizacion.toString(),
+        fechacreacion: fechacreacion.toString(),
+        idestatus: 0
+      }
+
+      const response = await addPerfilVentaEnc(update);
+
+      if (!response.ok) {
+        toast.error(response.message);
+        isLoading.value = false;
+        return;
+      }
+
+      toast.success(`El perfil con el id ${response.id} fue actualizado con éxito.`);
+      await value(0);
+      closedModal.value = false;
+    }
+
+    const resetForm = () => {
+      handleReset();
+    }
+
     return {
       idperfilenc,
       idperfilencAttrs,
@@ -212,10 +244,13 @@ export default defineComponent({
       perfiles,
       actionOption,
       textLoading,
+      closedModal,
       updateModal,
       onSubmit,
       getID,
-      theadPerfiles: computed(() => ['ID', 'Descripción', 'Estatus', 'Fecha Creación']),
+      resetForm,
+      cambioEstatus,
+      theadPerfiles: computed(() => ['ID', 'Descripción', 'Estatus', 'Fecha Creación', 'Acción']),
       theadDetalles: computed(() => ['ID Clasificación', 'Descripción', 'Clave', 'Diferencial']),
     }
   }
