@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ButtonCustom from "@/components/ButtonCustom.vue";
 import CustomInput from "@/components/CustomInput.vue";
 import LoadingCustom from "@/components/LoadingCustom.vue";
@@ -6,10 +7,20 @@ import TableWithSlot from "@/components/TableWithSlot.vue";
 import { useForm } from "vee-validate";
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { getPMVENC } from "../../actions";
+import { AddPerfilDeduccionDet, AddPerfilDeduccionEnc, getPMVENC } from "../../actions";
 import { useToast } from "vue-toastification";
 import type { TBody } from "../../interfaces";
-
+import type { PMVENC } from "../../interfaces/PMVENC.interface";
+import { v4 as uuidv4 } from 'uuid';
+import { getPerfilesDeducciones } from "../../actions/getPerfilDet.action";
+interface PerfilDet {
+  id: string,
+  idperfildet: number,
+  idperfilenc: number,
+  rango1: number,
+  rango2: number,
+  castigo: number
+}
 
 
 export default defineComponent({
@@ -22,16 +33,33 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const inputID = ref<HTMLInputElement | null>(null)
     const name = ref<string>('')
     const texto = ref<string>('Cargando.....')
     const isLoading = ref<boolean>(true);
-    const perfilesEnc = ref<TBody[]>([])
-    const toast = useToast();
-    const { defineField, errors } = useForm();
+    const perfilesEnc = ref<TBody[]>([]);
+    const perfilesDet = ref<PerfilDet[]>([]);
+    const datosPerfilesEnc = ref<PMVENC[]>([]);
 
-    const [id, idAttrs] = defineField("id");
+
+    const date = new Date();
+
+    const now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
+
+    const toast = useToast();
+    const { defineField, handleSubmit, errors, setValues } = useForm({
+      initialValues: {
+        idperfilenc: 0,
+        descripcion: '',
+        idestatus: '',
+        fechacreacion: now,
+        fechaactualizacion: now
+      }
+    });
+
+    const [idperfilenc, idperfilencAttrs] = defineField("idperfilenc");
     const [descripcion, descripcionAttrs] = defineField("descripcion");
-    const [estatus, estatusAttrs] = defineField("estatus");
+    const [idestatus, idestatusAttrs] = defineField("idestatus");
     const [fechacreacion, fechacreacionAttrs] = defineField("fechacreacion");
     const [fechaactualizacion, fechaactualizacionAttrs] = defineField("fechaactualizacion");
 
@@ -41,6 +69,7 @@ export default defineComponent({
     });
 
     const load = async (path: string) => {
+      datosPerfilesEnc.value = [];
       if (path.includes('perfil-micros')) {
         // alert('Hello Word')
         const response = await getPMVENC(0);
@@ -49,6 +78,8 @@ export default defineComponent({
           toast.error(response.message);
           return;
         }
+
+        datosPerfilesEnc.value = response.datos;
         perfilesEnc.value = response.datos.map(p => {
           return {
             id: p.idperfilenc,
@@ -68,6 +99,9 @@ export default defineComponent({
           toast.error(response.message);
           return;
         }
+
+        datosPerfilesEnc.value = response.datos;
+
         perfilesEnc.value = response.datos.map(p => {
           return {
             id: p.idperfilenc,
@@ -87,6 +121,9 @@ export default defineComponent({
           toast.error(response.message);
           return;
         }
+
+        datosPerfilesEnc.value = response.datos;
+
         perfilesEnc.value = response.datos.map(p => {
           return {
             id: p.idperfilenc,
@@ -98,6 +135,7 @@ export default defineComponent({
         isLoading.value = false;
         return;
       }
+
       if (path.includes('perfil-uhml')) {
         const response = await getPMVENC(3);
 
@@ -105,6 +143,9 @@ export default defineComponent({
           toast.error(response.message);
           return;
         }
+
+        datosPerfilesEnc.value = response.datos;
+
         perfilesEnc.value = response.datos.map(p => {
           return {
             id: p.idperfilenc,
@@ -134,13 +175,117 @@ export default defineComponent({
       return period;
     }
 
+    const onSubmit = handleSubmit(async values => {
+
+      const newValues = {
+        ...values,
+        idestatus: values.idestatus.includes('ACTIVO') ? 1 : 0
+      }
+      const response = await AddPerfilDeduccionEnc(newValues);
+
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
+
+      if (perfilesDet.value.length > 0) {
+
+        await saveDet(response.id);
+      }
+
+      await load(name.value)
+      selectedRow(response.id)
+    });
+
+    const addRow = () => {
+
+      if (perfilesDet.value.length > 0) {
+
+        perfilesDet.value.push({
+          id: uuidv4(),
+          idperfildet: 0,
+          idperfilenc: idperfilenc.value,
+          rango1: 0.0,
+          rango2: 0.0,
+          castigo: 0.0
+        });
+
+      } else {
+        perfilesDet.value.push({
+          id: uuidv4(),
+          idperfildet: 0,
+          idperfilenc: 0,
+          rango1: 0.0,
+          rango2: 0.0,
+          castigo: 0.0
+        });
+
+      }
+    }
+
+    const removeRow = (id: string) => {
+      perfilesDet.value = perfilesDet.value.filter(pd => pd.id !== id)
+    }
+
+    const selectedRow = async (id: number) => {
+
+      const { idestatus, fechacreacion, fechaactualizacion, estatus, ...params } = datosPerfilesEnc.value.filter(pc => pc.idperfilenc === id)[0];
+      setValues({
+        ...params,
+        idestatus: estatus.toUpperCase(),
+        fechacreacion: fechacreacion.toString().split('.')[0],
+        fechaactualizacion: fechaactualizacion.toString().split('.')[0]
+      });
+
+      const res = await getPerfilesDeducciones(id);
+
+      if (!res.ok) {
+        toast.error(res.message)
+        return;
+      }
+
+      perfilesDet.value = res.datos.map(d => {
+        return {
+          id: uuidv4(),
+          ...d
+        }
+      });
+
+    }
+
+    const valores = (e: Event, value: string, posicion: number) => {
+
+      if (perfilesDet.value[posicion] && value == 'rango1') {
+        perfilesDet.value[posicion][value] = parseFloat((e.target as HTMLInputElement).value);
+      }
+      if (perfilesDet.value[posicion] && value == 'rango2') {
+        perfilesDet.value[posicion][value] = parseFloat((e.target as HTMLInputElement).value);
+      }
+      if (perfilesDet.value[posicion] && value == 'castigo') {
+        perfilesDet.value[posicion][value] = parseFloat((e.target as HTMLInputElement).value);
+      }
+
+    }
+
+    const saveDet = async (idBD: number) => {
+      const newValues = perfilesDet.value.map(p => {
+        const { id, ...params } = p;
+        return {
+          ...params,
+          idperfilenc: idBD
+        }
+      });
+      const response = await AddPerfilDeduccionDet(newValues);
+
+    }
+
     return {
-      id,
-      idAttrs,
+      idperfilenc,
+      idperfilencAttrs,
       descripcion,
       descripcionAttrs,
-      estatus,
-      estatusAttrs,
+      idestatus,
+      idestatusAttrs,
       fechacreacion,
       fechacreacionAttrs,
       fechaactualizacion,
@@ -150,20 +295,14 @@ export default defineComponent({
       isLoading,
       perfilesEnc,
       cabecera: computed(() => ['ID', 'Descripción', 'Estatus', 'Fecha Creación']),
-      cabeceradet: computed(() => ['Rango 1', 'Rango 2', 'Cartigo']),
-      prueba: computed(() => [
-        { id: 1, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 2, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 3, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 4, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 5, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 6, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 7, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 8, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 9, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 10, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-        { id: 11, rango1: 2.60, rango2: 2.69, castigo: -12.00 },
-      ])
+      cabeceradet: computed(() => ['Rango 1', 'Rango 2', 'Cartigo', 'Acción']),
+      perfilesDet,
+      inputID,
+      addRow,
+      removeRow,
+      selectedRow,
+      valores,
+      onSubmit,
     }
   }
 });

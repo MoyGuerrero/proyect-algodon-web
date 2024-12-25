@@ -38,7 +38,7 @@
 
     <span class="form-label">Perfiles</span>
     <table-custom :thead="theadPerfiles" :cuerpo="perfiles" :is-optional="actionOption" @dblclick="getID"
-      @update-status="cambioEstatus" :closedModal="closedModal" :is-action="true" ; />
+      @update-status="cambioEstatus" :closedModal="closedModal" :is-action="true" />
 
     <hr>
     <span class="form-label mt-4">Detalles</span>
