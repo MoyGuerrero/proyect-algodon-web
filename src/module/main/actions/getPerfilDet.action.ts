@@ -13,9 +13,9 @@ interface Failed {
   message: string
 }
 
-export const getPerfilesDeducciones = async (id: number): Promise<Success | Failed> => {
+export const getPerfilesDeducciones = async (id: number, position: number): Promise<Success | Failed> => {
   try {
-    const { data } = await authAPi.get<Response>(`/catalogos/get_perfiles_deducciones/${id}`, { headers: { "Content-Type": "application/json" } });
+    const { data } = await authAPi.get<Response>(`/catalogos/get_perfiles_deducciones/${id}/${position}`, { headers: { "Content-Type": "application/json" } });
     return {
       ok: true,
       message: data.message,

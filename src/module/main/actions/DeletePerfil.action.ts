@@ -3,15 +3,7 @@ import { isAxiosError } from "axios";
 
 interface SuccessOrFailed {
   ok: boolean,
-  message: string
-}
-
-interface Values {
-  idperfildet: number,
-  idperfilenc: number,
-  rango1: number,
-  rango2: number,
-  castigo: number,
+  message: string,
 }
 
 interface Response {
@@ -20,17 +12,13 @@ interface Response {
   statuscode: number
 }
 
-export const AddPerfilDeduccionDet = async (values: Values[], position: number): Promise<SuccessOrFailed> => {
+export const DeletePerfil = async (position: number, idperfildet: number): Promise<SuccessOrFailed> => {
   try {
-    console.log(position);
-
-    const { data } = await authAPi.post<Response>(`/catalogos/agregar_perfiles_deduccion_enc/${position}`, values, { headers: { "Content-Type": "application/json" } })
-
+    const { data } = await authAPi.delete<Response>(`/catalogos/${position}/eliminar_perfil/${idperfildet}`);
     return {
       ok: true,
       message: data.message
     }
-
   } catch (error) {
     if (isAxiosError(error) && error.response && error.response.status >= 400) {
       return {

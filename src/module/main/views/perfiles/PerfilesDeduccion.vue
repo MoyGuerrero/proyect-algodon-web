@@ -37,7 +37,7 @@
         <div class="flex justify-between items-center gap-1">
           <div class="flex gap-4">
             <button-custom type="submit" text="Guardar" />
-            <button-custom type="button" text="Nuevo" />
+            <button-custom type="button" @click="resetForm" text="Nuevo" />
 
           </div>
           <div class="flex flex-row-reverse">
@@ -86,9 +86,14 @@
             <input class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
               @input="valores($event, 'rango2', index)" :value="p.rango2">
           </td>
-          <td class="px-6 py-4"> <input
-              class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
-              @input="valores($event, 'castigo', index)" :value="p.castigo"></td>
+          <td class="px-6 py-4">
+            <input class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+              @input="valores($event, 'castigo', index)" :value="p.castigo">
+          </td>
+          <td class="px-6 py-4" v-if="p.lenghtNDS !== undefined">
+            <input class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+              @input="valores($event, 'lenghtNDS', index)" :value="p.lenghtNDS">
+          </td>
           <td class="px-6 py-4"> <button class="bg-red-600 w-10 h-10 rounded-full text-white font-bold hover:bg-red-700"
               @click="removeRow(p.id)">-</button>
           </td>
@@ -96,6 +101,31 @@
       </template>
     </table-with-slot>
   </div>
+
+  <modal-confirmation :open="open">
+    <template #header>
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white capitalize">
+        ¿Estas seguro que deseas eliminar este perfil?
+      </h3>
+      <button type="button" @click="open = false"
+        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        data-modal-hide="default-modal">
+        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </template>
+    <template #body>
+      <div class="flex justify-center gap-4">
+        <button @click="open = false"
+          class="bg-blue-600 md:py-2 py-4 px-3 rounded-lg text-white md:w-32 text-sm hover:bg-blue-800 w-full font-semibold">Cancelar</button>
+        <button @click="deletePerfil"
+          class="bg-red-600 md:py-2 py-4 px-3 rounded-lg text-white md:w-32 text-sm hover:bg-red-800 w-full font-semibold">Aceptar</button>
+      </div>
+    </template>
+  </modal-confirmation>
 
   <LoadingCustom :open="isLoading" :texto="texto" />
 </template>

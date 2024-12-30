@@ -27,9 +27,9 @@ interface Values {
   fechaactualizacion: string | Date,
 }
 
-export const AddPerfilDeduccionEnc = async (values: Values): Promise<Success | Failed> => {
+export const AddPerfilDeduccionEnc = async (values: Values, position: number): Promise<Success | Failed> => {
   try {
-    const { data } = await authAPi.post<Response>("/catalogos/agregar_perfiles_deduccion", values, { headers: { "Content-Type": "application/json" } });
+    const { data } = await authAPi.post<Response>(`/catalogos/agregar_perfiles_deduccion/${position}`, values, { headers: { "Content-Type": "application/json" } });
     return {
       ok: true,
       message: data.message,

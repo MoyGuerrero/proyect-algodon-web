@@ -11,6 +11,7 @@ interface Values {
   idperfilenc: number,
   rango1: number,
   rango2: number,
+  lenghtNDS?: number,
   castigo: number,
 }
 
@@ -20,11 +21,10 @@ interface Response {
   statuscode: number
 }
 
-export const AddPerfilDeduccionDet = async (values: Values[], position: number): Promise<SuccessOrFailed> => {
+export const AddPerfilUHNK = async (values: Values[]): Promise<SuccessOrFailed> => {
   try {
-    console.log(position);
 
-    const { data } = await authAPi.post<Response>(`/catalogos/agregar_perfiles_deduccion_enc/${position}`, values, { headers: { "Content-Type": "application/json" } })
+    const { data } = await authAPi.post<Response>("/catalogos/agregar_perfiles_deduccion_enc_uhml", values, { headers: { "Content-Type": "application/json" } })
 
     return {
       ok: true,
