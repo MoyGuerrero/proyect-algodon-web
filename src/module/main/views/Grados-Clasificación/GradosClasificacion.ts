@@ -107,7 +107,7 @@ export default defineComponent({
 
 
     const dowload = async () => {
-      await dowloadGC();
+      await dowloadGC("plantilla_carga_gradosclasif");
     }
 
     const edit = (id: number) => {

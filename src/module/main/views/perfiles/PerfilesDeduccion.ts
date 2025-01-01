@@ -5,6 +5,7 @@ import LoadingCustom from "@/components/LoadingCustom.vue";
 import TableCustom from "@/components/TableCustom.vue";
 import TableWithSlot from "@/components/TableWithSlot.vue";
 import ModalConfirmation from "../../components/ModalConfirmation.vue";
+import * as XLSX from 'xlsx'
 
 import { useForm } from "vee-validate";
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
@@ -16,6 +17,7 @@ import type { TBody } from "../../interfaces";
 import type { PMVENC } from "../../interfaces/PMVENC.interface";
 import { v4 as uuidv4 } from 'uuid';
 import { getPerfilesDeducciones } from "../../actions/getPerfilDet.action";
+import type { number } from "yup";
 
 interface PerfilDet {
   id: string,
@@ -25,6 +27,13 @@ interface PerfilDet {
   rango2: number,
   castigo: number,
   lenghtNDS?: number
+}
+
+interface Excel {
+  r1: number,
+  r2: number,
+  l: number,
+  c: number
 }
 
 
@@ -48,12 +57,13 @@ export default defineComponent({
     const perfilesDet = ref<PerfilDet[]>([]);
     const datosPerfilesEnc = ref<PMVENC[]>([]);
     const position = ref<number>(0);
-    const open = ref<boolean>(false)
-    const cabecera = ref<string[]>(['Rango 1', 'Rango 2', 'Cartigo'])
+    const open = ref<boolean>(false);
+    const cabecera = ref<string[]>(['Rango 1', 'Rango 2', 'Cartigo']);
+    const inputFile = ref<HTMLInputElement | null>(null);
 
     const date = new Date();
 
-    const now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
+    const now = `${date.getFullYear()}-${(date.getMonth() + 1) > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate() > 9 ? date.getDate() : '0' + date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
 
     const toast = useToast();
     const { defineField, handleSubmit, errors, setValues, handleReset } = useForm({
@@ -257,7 +267,6 @@ export default defineComponent({
     const removeRow = (id: string) => {
       open.value = true;
       idRow.value = id;
-
     };
 
     const selectedRow = async (id: number) => {
@@ -278,7 +287,6 @@ export default defineComponent({
         toast.error(res.message)
         return;
       }
-      console.log(res.datos);
 
       perfilesDet.value = res.datos.map(d => {
         return {
@@ -354,7 +362,7 @@ export default defineComponent({
     }
 
     const deletePerfil = async () => {
-
+      isLoading.value = true;
       const selected = perfilesDet.value.filter(pd => pd.id === idRow.value);
       const { idperfildet, ...params } = selected[0];
 
@@ -367,6 +375,57 @@ export default defineComponent({
       perfilesDet.value = perfilesDet.value.filter(pd => pd.id !== idRow.value)
       toast.success(response.message);
       open.value = false;
+      isLoading.value = false;
+    }
+
+    const cargarArchivo = () => idperfilenc.value > 0 ? inputFile.value?.click() : toast.info("Favor de seleccionar o crear un perfil para cargar los detalles.");
+    // const cargarArchivo = () => inputFile.value?.click();
+    const onChangeFile = (e: Event) => {
+      isLoading.value = true;
+      const target = (e.target as HTMLInputElement)
+      const validateExtension = ['xltx', 'xlsx']
+      if (!target.files) return;
+
+      const extension = target.files[0].name.split('.').pop()?.toLowerCase();
+
+      if (extension && !validateExtension.includes(extension)) {
+        toast.error("El archivo seleccionado no es compatible, favor de cargar un excel.");
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const result = e.target?.result;
+
+        if (!(result instanceof ArrayBuffer)) return;
+
+        const data = new Uint8Array(result);
+
+        const workbook = XLSX.read(data, { type: "array" });
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        perfilesDet.value = (jsonData.slice(1) as Excel[][]).map((d: Excel[]) => {
+          const [R1, R2, L, C] = d;
+          return {
+            id: uuidv4(),
+            idperfildet: 0,
+            idperfilenc: idperfilenc.value,
+            rango1: R1 == undefined ? 0 : Number(R1),
+            rango2: R2 == undefined ? 0 : Number(R2),
+            castigo: C == undefined ? 0 : Number(C),
+            lenghtNDS: L == undefined ? 0 : Number(L)
+          }
+        })
+
+
+      }
+      reader.readAsArrayBuffer(target.files[0])
+      toast.success('Cargado con éxito.')
+      isLoading.value = false;
     }
 
     return {
@@ -396,6 +455,9 @@ export default defineComponent({
       resetForm,
       onSubmit,
       deletePerfil,
+      cargarArchivo,
+      onChangeFile,
+      inputFile
     }
   }
 });

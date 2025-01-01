@@ -2,10 +2,10 @@ import { authAPi } from "@/api/authApi";
 
 
 
-export const dowloadGC = async () => {
+export const dowloadGC = async (nombre_archivo: string) => {
 
   try {
-    const response = await authAPi.get('/catalogos/descargar_plantilla_gc', {
+    const response = await authAPi.get(`/catalogos/descargar_plantilla/${nombre_archivo}`, {
       headers: {
         "Content-Type": "application/json"
       }
