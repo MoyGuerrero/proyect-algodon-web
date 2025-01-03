@@ -28,19 +28,34 @@
       </div>
       <div class="md:col-span-2 gap-1">
         <div class="flex flex-col md:flex-row justify-between items-center gap-1">
-          <div class="gap-1 flex flex-col md:flex-row w-full">
+          <div class="gap-1 flex flex-col md:flex-row w-full mb-5">
             <button-custom type="button" text="Clases" @click="isVisibleModal = true" />
             <button-custom type="submit" text="Guardar" />
           </div>
-          <div class="flex flex-row-reverse">
-            <button class="bg-green-600 px-3 py-2.5 rounded-full text-white" type="button" @click="dowload">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-              </svg>
-
-            </button>
+          <div class="flex flex-row-reverse gap-4">
+            <div class="flex flex-col justify-center items-center gap-0">
+              <button class="bg-green-600 w-10 h-10 flex justify-center items-center rounded-full text-white"
+                type="button" @click="dowload">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </button>
+              <label for="grade" class="form-label">Descargar</label>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-0">
+              <button class="bg-green-600 w-10 h-10 flex justify-center items-center rounded-full text-white"
+                type="button" @click="cargarArchivo">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+              </button>
+              <input type="file" class="hidden" ref="inputFile" @change="onChangeFile">
+              <label for="grade" class="form-label">Cargar</label>
+            </div>
           </div>
         </div>
       </div>

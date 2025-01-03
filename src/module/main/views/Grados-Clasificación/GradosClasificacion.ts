@@ -10,10 +10,26 @@ import { getGradosClasificacion } from '../../actions/grados_clasificacion.actio
 import type { DatosGrados } from '../../interfaces/grados_clasificacion.interface';
 import TableCustom from '@/components/TableCustom.vue';
 import LoadingCustom from '@/components/LoadingCustom.vue';
-import { addGC, dowloadGC, getClases } from '../../actions';
+import { addGC, DeleteGradosClasif, dowloadGC, getClases } from '../../actions';
 import { useToast } from 'vue-toastification';
+import * as XLSX from 'xlsx'
 
 const valores: string[] = [];
+
+interface JSONDATA {
+  gradocolor: string,
+  trashid: number,
+  descripcion: string,
+  idclase: number
+}
+
+interface GC {
+  Idgradosclasificacion: number,
+  gradocolor: string,
+  trashId: number,
+  descripcion: string,
+  idclase: number | string
+}
 
 const validationSchema = yup.object({
   gradocolor: yup.string().required(),
@@ -37,11 +53,12 @@ export default defineComponent({
     LoadingCustom
   },
   setup() {
-    const isVisibleModal = ref<boolean>(false)
+    const isVisibleModal = ref<boolean>(false);
     const datos = ref<DatosGrados[]>([])
     const isLoading = ref<boolean>(true);
     const grades = ref<Grade[]>([]);
-    const textLoading = ref<string>('')
+    const textLoading = ref<string>('');
+    const inputFile = ref<HTMLInputElement | null>(null);
     const toast = useToast();
 
     const { defineField, errors, handleSubmit, setValues, handleReset } = useForm({
@@ -123,6 +140,67 @@ export default defineComponent({
 
     }
 
+    const cargarArchivo = () => inputFile.value?.click();
+
+    const onChangeFile = (e: Event) => {
+      isLoading.value = true;
+      const target = (e.target as HTMLInputElement)
+      const validateExtension = ['xltx', 'xlsx']
+      const arrayValues = [];
+      if (!target.files) return;
+
+      const extension = target.files[0].name.split('.').pop()?.toLowerCase();
+
+      if (extension && !validateExtension.includes(extension)) {
+        toast.error("El archivo seleccionado no es compatible, favor de cargar un excel.");
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onload = async (e) => {
+
+        const response = await DeleteGradosClasif();
+
+        if (!response.ok) {
+          toast.error(response.message)
+          return;
+        }
+        const result = e.target?.result;
+
+        if (!(result instanceof ArrayBuffer)) return;
+
+        const data = new Uint8Array(result);
+
+        const workbook = XLSX.read(data, { type: "array" });
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        const jsonData: JSONDATA[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        for (let i = 0; i < jsonData.slice(1).length; i++) {
+          const [gradocolor, trashid, descripcion, idclase] = jsonData.slice(1)[i];
+          // console.log(gradocolor, trashid, descripcion, idclase);
+          const values: GC = {
+            Idgradosclasificacion: 0,
+            gradocolor: gradocolor === undefined ? '' : gradocolor.toString(),
+            trashId: trashid === undefined ? 0 : Number(trashid),
+            descripcion: descripcion === undefined ? '' : descripcion.toString(),
+            idclase: idclase === undefined ? '' : Number(idclase)
+          }
+
+          arrayValues.push(values);
+
+          await addGC(values)
+        }
+
+        toast.success('Datos guardados con éxito.')
+        isLoading.value = false;
+        await carga();
+      }
+      reader.readAsArrayBuffer(target.files[0])
+    }
+
     return {
       Idgradosclasificacion,
       IdgradosclasificacionAttrs,
@@ -141,9 +219,12 @@ export default defineComponent({
       router,
       grades,
       textLoading,
+      inputFile,
       dowload,
       onSubmit,
       edit,
+      cargarArchivo,
+      onChangeFile
     }
   }
 });

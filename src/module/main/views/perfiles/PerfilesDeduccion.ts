@@ -17,7 +17,7 @@ import type { TBody } from "../../interfaces";
 import type { PMVENC } from "../../interfaces/PMVENC.interface";
 import { v4 as uuidv4 } from 'uuid';
 import { getPerfilesDeducciones } from "../../actions/getPerfilDet.action";
-import type { number } from "yup";
+
 
 interface PerfilDet {
   id: string,
@@ -365,15 +365,19 @@ export default defineComponent({
       isLoading.value = true;
       const selected = perfilesDet.value.filter(pd => pd.id === idRow.value);
       const { idperfildet, ...params } = selected[0];
+      perfilesDet.value = perfilesDet.value.filter(pd => pd.id !== idRow.value)
 
-      const response = await DeletePerfil(position.value, idperfildet);
-      if (!response.ok) {
-        toast.error(response.message);
-        return;
+      if (idperfildet > 0) {
+        const response = await DeletePerfil(position.value, idperfildet);
+        if (!response.ok) {
+          toast.error(response.message);
+          open.value = false;
+          isLoading.value = false;
+          return;
+        }
+        toast.success(response.message);
       }
 
-      perfilesDet.value = perfilesDet.value.filter(pd => pd.id !== idRow.value)
-      toast.success(response.message);
       open.value = false;
       isLoading.value = false;
     }
