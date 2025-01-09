@@ -86,19 +86,13 @@ export default defineComponent({
 
     const selectClass = (idclase: number) => {
 
-      const dataSelect = getDatos.value.filter(c => c.idclasesenc === idclase);
+    const dataSelect = getDatos.value.filter(c => c.idclasificacion === idclase);
 
       const { descripcion, ...params } = dataSelect[0];
-
       setValues({
         ...params,
         Descripcion: descripcion
       });
-
-
-
-      console.log('Desde el padre');
-
     }
 
     watch(() => props.open, (newOpen) => {
