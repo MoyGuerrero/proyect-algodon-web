@@ -12,6 +12,22 @@ import { addClient, getClientes } from "../../actions";
 import { useToast } from "vue-toastification";
 import type { TBody } from "../../interfaces";
 
+export interface Clientes {
+  idcliente: number;
+  nombre: string;
+  rfc: string;
+  calle: string;
+  numext: string;
+  colonia: string;
+  codigopostal: string;
+  municipio: string;
+  estado: string;
+  pais: string;
+  nombrecontacto: string;
+  mail: string;
+  telefono: string;
+}
+
 
 const validationSchema = yup.object({
   idcliente: yup.number(),
@@ -44,10 +60,11 @@ export default defineComponent({
     const isOpenModal = ref<boolean>(false);
     const isLoading = ref<boolean>(false);
     const ClientAndProveedor = ref<TBody[]>([]);
+    const userSelect = ref<Clientes[]>([]);
 
     const toast = useToast();
 
-    const { defineField, errors, handleSubmit, resetForm } = useForm({
+    const { defineField, errors, handleSubmit, resetForm, setValues } = useForm({
       validationSchema, initialValues: {
         idcliente: 0,
         nombre: "",
@@ -139,7 +156,7 @@ export default defineComponent({
         toast.error(response.message);
         return;
       }
-
+      userSelect.value = response.datos;
       ClientAndProveedor.value = response.datos.map(d => {
         return {
           id: d.idcliente,
@@ -183,6 +200,19 @@ export default defineComponent({
       isOpenModal.value = true
     }
 
+    const seleccionar = (id: number) => {
+      const value = userSelect.value.filter(user => user.idcliente === id);
+      console.log(value);
+
+      setValues(value[0]);
+      isOpenModal.value = false;
+
+    }
+
+    const reset = () => {
+      resetForm();
+    }
+
     return {
       idcliente,
       idclienteAttrs,
@@ -220,6 +250,8 @@ export default defineComponent({
       onSubmit,
       onDebounce,
       consultar,
+      seleccionar,
+      reset
     }
   }
 });

@@ -26,7 +26,8 @@
               <input type="text" placeholder="Buscar...."
                 @input="$emit('modalUpdate', ($event.target as HTMLInputElement).value ?? 'f')"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none">
-              <TableCustom :thead="cabeceras" :cuerpo="cuerpo" :isViewID="false" :is-optional="false" />
+              <TableCustom :thead="cabeceras" :cuerpo="cuerpo" :isViewID="false" :is-optional="false"
+                @dblclick="prueba" />
             </p>
           </div>
         </div>
@@ -48,9 +49,11 @@ const props = defineProps<{
   cabeceras: string[],
   cuerpo?: TBody[]
 }>();
+const emit = defineEmits(['click', 'modalUpdate', 'setID']);
 
-
-defineEmits(['click', 'modalUpdate']);
+const prueba = (id: number) => {
+  emit('setID', id)
+}
 
 
 </script>

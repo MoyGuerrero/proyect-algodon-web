@@ -197,6 +197,11 @@ export default defineComponent({
       isLoading.value = true;
       await value(id);
       isLoading.value = false;
+      window.scrollTo({
+        top: 100,
+        left: 100,
+        behavior: "smooth",
+      });
     }
 
     const cambioEstatus = async (id: number) => {

@@ -29,7 +29,8 @@
       <div class="md:col-span-2 gap-1">
         <div class="flex flex-col md:flex-row justify-between items-center gap-1">
           <div class="gap-1 flex flex-col md:flex-row w-full mb-5">
-            <button-custom type="button" text="Clases" @click="isVisibleModal = true" />
+            <button-custom type="button" bg-color="bg-blue-600" hover="hover:bg-blue-800" text="Clases"
+              @click="isVisibleModal = true" />
             <button-custom type="submit" text="Guardar" />
           </div>
           <div class="flex flex-row-reverse gap-4">

@@ -136,7 +136,12 @@ export default defineComponent({
         ...params,
         trashId: trashid,
         idclase: getGrade[0].id.toString()
-      })
+      });
+      window.scrollTo({
+        top: 100,
+        left: 100,
+        behavior: "smooth",
+      });
 
     }
 

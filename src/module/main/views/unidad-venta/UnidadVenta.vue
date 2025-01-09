@@ -44,13 +44,14 @@
       </div>
 
       <div class="md:col-span-4">
-        <div class="flex flex-row-reverse">
+        <div class="flex flex-row-reverse gap-4">
           <button-custom type="submit" text="Guardar" />
+          <button-custom type="button" bg-color="bg-blue-600" hover="hover:bg-blue-800" @click="reset" text="Nuevo" />
         </div>
       </div>
     </form>
 
-    <table-custom :thead="cabecera" :cuerpo="body" :is-optional="false" />
+    <table-custom :thead="cabecera" :cuerpo="body" :is-optional="false" @dblclick="unidadSeleccionada" />
   </div>
   <LoadingCustom :open="isLoading" :texto="textLoading" />
 </template>

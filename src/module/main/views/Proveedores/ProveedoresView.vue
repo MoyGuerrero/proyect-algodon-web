@@ -61,8 +61,9 @@
       <div class="md:col-span-4">
         <div class="flex flex-row-reverse gap-1">
           <button-custom type="submit" text="Guardar" />
-          <button-custom type="button" text="Nuevo" />
-          <button-custom type="button" text="Consultar" @click="consultar" />
+          <button-custom type="button" bg-color="bg-blue-600" hover="hover:bg-blue-800" @click="reset" text="Nuevo" />
+          <button-custom type="button" bg-color="bg-blue-600" hover="hover:bg-blue-800" text="Consultar"
+            @click="consultar" />
 
         </div>
       </div>
@@ -76,7 +77,7 @@
       </button> -->
     </form>
     <ModalView :open="isOpenModal" @click="isOpenModal = false" :tipo="name" :cabeceras="cabecera"
-      :cuerpo="ClientAndProveedor" @modalUpdate="onDebounce" />
+      :cuerpo="ClientAndProveedor" @modalUpdate="onDebounce" @setID="seleccionar" />
     <LoadingCustom :open="isLoading" texto="Guardando......" />
   </div>
   <!-- <pre>{{ errors }}</pre> -->

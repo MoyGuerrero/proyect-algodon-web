@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ButtonCustom from "@/components/ButtonCustom.vue";
 import CustomInput from "@/components/CustomInput.vue";
 import TableCustom from "@/components/TableCustom.vue";
@@ -9,6 +10,7 @@ import { agregarUnidadVenta, getUnidadVenta } from "../../actions";
 import { useToast } from "vue-toastification";
 import LoadingCustom from "@/components/LoadingCustom.vue";
 import * as yup from 'yup';
+import type { UVenta } from "../../interfaces/UnidadVenta.interface";
 
 const validationSchema = yup.object({
   idperfilenc: yup.number() || yup.string(),
@@ -36,6 +38,7 @@ export default defineComponent({
     const toast = useToast();
     const body = ref<TBody[]>([]);
     const isLoading = ref<boolean>(true);
+    const uVenta = ref<UVenta[]>([])
 
     const textLoading = ref<string>("Cargando....")
 
@@ -43,7 +46,7 @@ export default defineComponent({
 
     const now = `${date.getFullYear()}-${(date.getMonth() + 1) > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate() > 9 ? date.getDate() : '0' + date.getDate()}T${date.getHours() > 9 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()}`;
 
-    const { defineField, errors, handleSubmit, resetForm } = useForm({
+    const { defineField, errors, handleSubmit, resetForm, setValues } = useForm({
       validationSchema, initialValues: {
         idperfilenc: 0,
         descripcion: '',
@@ -73,6 +76,8 @@ export default defineComponent({
         toast.error(response.message)
         return;
       }
+
+      uVenta.value = response.datos;
 
       body.value = response.datos.map(uv => {
         return {
@@ -120,6 +125,27 @@ export default defineComponent({
       return period;
     }
 
+    const unidadSeleccionada = (id: number) => {
+      // alert(id);
+      const unidad = uVenta.value.filter(v => v.idperfilenc === id);
+
+      const params = unidad.map(({ estatus, ...u }) => {
+        return {
+          ...u,
+          fechaactualizacion: u.fechaactualizacion.toString(),
+          fechacreacion: u.fechacreacion.toString(),
+          idestatus: u.idestatus == 1 ? 'ACTIVO' : 'INACTIVO'
+        }
+      });
+
+      setValues(params[0])
+
+    }
+
+
+    const reset = () => {
+      resetForm();
+    }
 
     return {
       idperfilenc,
@@ -140,7 +166,9 @@ export default defineComponent({
       textLoading,
 
       cabecera: computed(() => ['ID', 'Descripción', 'Valor', 'Estatus', 'Fecha Creación']),
-      onSubmit
+      onSubmit,
+      unidadSeleccionada,
+      reset
     }
   }
 });

@@ -31,7 +31,8 @@
       <div class="mb-4 md:col-span-2">
         <div class="flex md:flex-row-reverse flex-col gap-4">
           <button-custom :type="'submit'" text="Guardar" />
-          <button-custom :type="'button'" @click="resetForm" text="Nuevo" />
+          <button-custom :type="'button'" bg-color="bg-blue-600" hover="hover:bg-blue-800" @click="resetForm"
+            text="Nuevo" />
         </div>
       </div>
     </form>

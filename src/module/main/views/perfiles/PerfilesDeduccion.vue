@@ -37,7 +37,8 @@
         <div class="flex justify-between items-center gap-1">
           <div class="flex gap-4">
             <button-custom type="submit" text="Guardar" />
-            <button-custom type="button" @click="resetForm" text="Nuevo" />
+            <button-custom type="button" bg-color="bg-blue-600" hover="hover:bg-blue-800" @click="resetForm"
+              text="Nuevo" />
 
           </div>
           <div class="flex flex-row-reverse">

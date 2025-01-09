@@ -40,7 +40,7 @@ export const useSideBar = () => {
       id: uuidv4(), name: 'Comercialización', subpath: [
         { id: uuidv4(), name: 'Recibas', path: 'recibas', children: [] },
         { id: uuidv4(), name: 'Calculo compra', path: 'calculo-compra', children: [] },
-        { id: uuidv4(), name: 'Adjuntar Factura', path: 'adjuntar-factura', children: [] },
+        // { id: uuidv4(), name: 'Adjuntar Factura', path: 'adjuntar-factura', children: [] },
       ]
     },
     {
