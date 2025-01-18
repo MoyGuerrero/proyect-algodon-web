@@ -14,4 +14,5 @@ export interface Data {
   clave: string;
   tipo: string;
   descripcion: string;
+  avatar: string;
 }

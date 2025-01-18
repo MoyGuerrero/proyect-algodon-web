@@ -21,9 +21,14 @@ export const RenewToken = async (): Promise<CheckError | CheckSuccess> => {
     }
     const { data } = await authAPi.get<AuthResponse>('/usuario/renewToken');
 
+    const newData: Data = {
+      ...data.data,
+      avatar: data.data.avatar === null || data.data.avatar === '' ? `http://localhost/noImage/no-image.png` : `http://localhost/empleados/${data.data.avatar}`,
+    }
+
     return {
       ok: true,
-      user: data.data,
+      user: newData,
       token: data.token
     }
 

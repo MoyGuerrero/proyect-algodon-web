@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
         toast.error(loginResp.msg)
         return false;
       }
+      console.log(loginResp.user);
 
       user.value = loginResp.user;
       token.value = loginResp.token;
@@ -81,6 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
     isChecking: computed(() => authStatus.value === AuthStatus.Checking),
     isAuntenticado: computed(() => authStatus.value === AuthStatus.Autenticado),
     username: computed(() => user.value?.nombre),
+    getAvatar: computed(() => user.value?.avatar),
     onLogin,
     checkStatusAuth,
     onLogout

@@ -29,11 +29,12 @@
           <span class="sr-only">Close menu</span>
         </button>
       </div>
-      <div class="mb-5 block">
-        <span class="block text-white text-sm font-bold mb-2">Usuario</span>
+      <div class="flex flex-col justify-center items-center">
+        <!-- <span class="block text-white text-sm font-bold mb-2">Usuario</span> -->
+        <img :src="authStore.getAvatar" class="w-20 h-20 rounded-full shadow-2xl" alt="">
         <label class="block text-sm text-white font-bold mb-2">{{ authStore.username }}</label>
       </div>
-
+      <hr>
       <ul class="space-y-2 font-medium">
         <template v-for="menu in menus" :key="menu.id">
           <template v-if="menu.subpath && menu.subpath.length > 0">
