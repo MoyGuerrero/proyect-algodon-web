@@ -1,15 +1,23 @@
 import ButtonCustom from "@/components/ButtonCustom.vue";
-import { defineComponent } from "vue";
-
+import TableWithSlot from "@/components/TableWithSlot.vue";
+import { computed, defineComponent, ref } from "vue";
 
 
 export default defineComponent({
   components: {
-    ButtonCustom
+    ButtonCustom,
+    TableWithSlot
   },
   setup() {
-    return {
 
+    const tabs = ref<string[]>(['Deducciones']);
+    const cabecera = ref<string[]>(['ID Clase', 'Grade', 'Dif', 'Precio']);
+
+    return {
+      tabs,
+      cabecera,
+
+      thead: computed(() => ['Predio', 'BaleID', 'Mic', 'UHML', 'UI', 'Strength', 'SFI', 'Grade', 'Color Grade', 'Kilos compra', 'Libras compra', 'Quintales compra', 'Seleccionar'])
     }
   }
 })
